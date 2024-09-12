@@ -26,13 +26,15 @@ import {
     DialogTrigger,
 } from "@/shadcdn/ui/dialog";
 import { Label } from "@/shadcdn/ui/label";
+import OrderDialog from "@/Components/OrderDialog";
+import CheckoutDialog from "@/Components/CheckoutDialog";
 
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-gray-100 w-full">
             <nav className="bg-[#499392] border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 ">
                     <div className="flex justify-between h-16 items-center">
@@ -56,62 +58,26 @@ export default function Authenticated({ user, header, children }) {
 
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
                             <div className="flex items-center gap-2 cursor-pointer">
-                                <ShoppingCartIcon
-                                    fontSize="medium"
-                                    className="text-white"
+                                <CheckoutDialog
+                                    title="Checkout"
+                                    imgSrc="https://atchealthcare.com.ph/wp-content/uploads/2020/03/Robust-Extreme-.png"
+                                    itemName="Centeral Catheter Kit"
+                                    itemCost="7,500.00"
+                                    quantity={5}
                                 />
+
                                 <ChatIcon
                                     fontSize="medium"
                                     className="text-white"
                                 />
-                                <Dialog>
-                                    <DialogTrigger asChild>
-                                        <ReceiptLongIcon
-                                            fontSize="medium"
-                                            className="text-white"
-                                        />
-                                    </DialogTrigger>
-                                    <DialogContent className="sm:max-w-[425px]">
-                                        <DialogHeader className="text-center">
-                                            <DialogTitle>
-                                                Order History
-                                            </DialogTitle>
-                                        </DialogHeader>
-                                        <div className="grid gap-4 py-4">
-                                            <div className="grid grid-cols-4 items-center gap-4">
-                                                <Label
-                                                    htmlFor="name"
-                                                    className="text-right"
-                                                >
-                                                    Name
-                                                </Label>
-                                                <Input
-                                                    id="name"
-                                                    value="Pedro Duarte"
-                                                    className="col-span-3"
-                                                />
-                                            </div>
-                                            <div className="grid grid-cols-4 items-center gap-4">
-                                                <Label
-                                                    htmlFor="username"
-                                                    className="text-right"
-                                                >
-                                                    Username
-                                                </Label>
-                                                <Input
-                                                    id="username"
-                                                    value="@peduarte"
-                                                    className="col-span-3"
-                                                />
-                                            </div>
-                                        </div>
-                                        <DialogFooter>
-                                            <Button type="submit">
-                                                Save changes
-                                            </Button>
-                                        </DialogFooter>
-                                    </DialogContent>
-                                </Dialog>
+
+                                <OrderDialog
+                                    title="Order History"
+                                    imgSrc="https://atchealthcare.com.ph/wp-content/uploads/2020/03/Robust-Extreme-.png"
+                                    itemName="Centeral Catheter Kit"
+                                    itemCost="7,500.00"
+                                    quantity={5}
+                                />
 
                                 <MyLocationIcon
                                     fontSize="medium"
@@ -144,51 +110,6 @@ export default function Authenticated({ user, header, children }) {
                                 </div>
                             </div>
                         </div>
-
-                        {/* <div className="hidden sm:flex sm:items-center sm:ms-6">
-                            <div className="ms-3 relative">
-                                <Dropdown>
-                                    <Dropdown.Trigger>
-                                        <span className="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
-                                            >
-                                                {user.name}
-
-                                                <svg
-                                                    className="ms-2 -me-0.5 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </Dropdown.Trigger>
-
-                                    <Dropdown.Content>
-                                        <Dropdown.Link
-                                            href={route("profile.edit")}
-                                        >
-                                            Profile
-                                        </Dropdown.Link>
-                                        <Dropdown.Link
-                                            href={route("logout")}
-                                            method="post"
-                                            as="button"
-                                        >
-                                            Log Out
-                                        </Dropdown.Link>
-                                    </Dropdown.Content>
-                                </Dropdown>
-                            </div>
-                        </div> */}
 
                         <div className="-me-2 flex items-center sm:hidden">
                             <button
@@ -282,7 +203,7 @@ export default function Authenticated({ user, header, children }) {
                 </header>
             )}
 
-            <main>{children}</main>
+            <main className="w-full">{children}</main>
         </div>
     );
 }

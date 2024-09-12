@@ -39,16 +39,17 @@ export default function Dashboard({ auth }) {
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title="Dashboard" />
-            <div className="w-full flex justify-center"> <div className="p-5 flex flex-wrap gap-5 w-[80%] justify-start">
-  {items.map((item) => (
-    <ItemCard
-      item={item.item}
-      img={item.img}
-      type={item.type}
-    />
-  ))}
-</div></div>
-
+            <div className="w-full flex justify-center ">
+                <div className="p-5 flex flex-wrap gap-5  justify-start border border-red-500">
+                    {items.map((item) => (
+                        <ItemCard
+                            item={item.item}
+                            img={item.img}
+                            type={item.type}
+                        />
+                    ))}
+                </div>
+            </div>
         </AuthenticatedLayout>
     );
 }
