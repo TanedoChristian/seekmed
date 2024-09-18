@@ -1,6 +1,8 @@
 import ItemCard from "@/Components/ItemCard";
+import ProductList from "@/Components/ProductList";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
+import { useState } from "react";
 
 export default function Dashboard({ auth }) {
     var items = [
@@ -36,20 +38,23 @@ export default function Dashboard({ auth }) {
         },
     ];
 
+    const [open, setOpen] = useState(false);
+    const handleDialogOpen = () => {
+        setOpen(true);
+    };
+
+    const handleDialogClose = () => {
+        setOpen(false);
+    };
+
     return (
-        <AuthenticatedLayout user={auth.user}>
+        <AuthenticatedLayout
+            user={auth.user}
+            open={open}
+            onOpenChange={setOpen}
+        >
             <Head title="Dashboard" />
-            <div className="w-full flex justify-center ">
-                <div className="p-5 flex flex-wrap gap-5  justify-start border border-red-500">
-                    {items.map((item) => (
-                        <ItemCard
-                            item={item.item}
-                            img={item.img}
-                            type={item.type}
-                        />
-                    ))}
-                </div>
-            </div>
+            <ProductList items={items} handleDialogOpen={handleDialogOpen} />
         </AuthenticatedLayout>
     );
 }

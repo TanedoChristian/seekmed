@@ -1,46 +1,23 @@
-import { useState } from "react";
-import ApplicationLogo from "@/Components/ApplicationLogo";
-import Dropdown from "@/Components/Dropdown";
-import NavLink from "@/Components/NavLink";
+import AdminSideNav from "@/Components/AdminSideNav";
+import AdminTable from "@/Components/AdminTable";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
-import { Separator } from "@/shadcdn/ui/separator";
 import { Input } from "@/shadcdn/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/shadcdn/ui/popover";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import ChatIcon from "@mui/icons-material/Chat";
-import MyLocationIcon from "@mui/icons-material/MyLocation";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import { Person2 } from "@mui/icons-material";
 
-import { Button } from "@/shadcdn/ui/button";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/shadcdn/ui/dialog";
-import { Label } from "@/shadcdn/ui/label";
-import OrderDialog from "@/Components/OrderDialog";
-import CheckoutDialog from "@/Components/CheckoutDialog";
+import { useState } from "react";
+import DeliveryRiderTable from "@/Components/DeliveryRiderTable";
+import OrdersTable from "@/Components/OrdersTable";
 
-export default function Authenticated({
-    user,
-    header,
-    children,
-    open,
-    setIsOpen,
-}) {
+export default function Admin({ auth, products, name, riders }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
+    const [tableCategory, setTableCategory] = useState("inventory");
+
     return (
-        <div className="min-h-screen bg-gray-100 w-full">
+        <div>
             <nav className="bg-[#499392] border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 ">
                     <div className="flex justify-between h-16 items-center">
@@ -64,70 +41,11 @@ export default function Authenticated({
 
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
                             <div className="flex items-center gap-2 cursor-pointer">
-                                <CheckoutDialog
-                                    open={open}
-                                    setIsOpen={setIsOpen}
-                                    title="Checkout"
-                                    imgSrc="https://atchealthcare.com.ph/wp-content/uploads/2020/03/Robust-Extreme-.png"
-                                    itemName="Centeral Catheter Kit"
-                                    itemCost="7,500.00"
-                                    quantity={5}
-                                />
-
-                                <ChatIcon
-                                    fontSize="medium"
-                                    className="text-white"
-                                />
-
-                                <OrderDialog
-                                    title="Order History"
-                                    imgSrc="https://atchealthcare.com.ph/wp-content/uploads/2020/03/Robust-Extreme-.png"
-                                    itemName="Centeral Catheter Kit"
-                                    itemCost="7,500.00"
-                                    quantity={5}
-                                />
-
-                                <MyLocationIcon
-                                    fontSize="medium"
-                                    className="text-white"
-                                />
-
                                 <div className="ml-10 flex gap-2">
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <NotificationsIcon
-                                                fontSize="medium"
-                                                className="text-white"
-                                            />
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-80">
-                                            <div className="grid gap-4">
-                                                <div className="space-y-2">
-                                                    <h4 className="font-medium leading-none">
-                                                        Orders
-                                                    </h4>
-                                                </div>
-                                            </div>
-                                        </PopoverContent>
-                                    </Popover>
-
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <ManageAccountsIcon
-                                                fontSize="medium"
-                                                className="text-white"
-                                            />
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-30">
-                                            <ResponsiveNavLink
-                                                method="post"
-                                                href={route("logout")}
-                                                as="button"
-                                            >
-                                                Log Out
-                                            </ResponsiveNavLink>
-                                        </PopoverContent>
-                                    </Popover>
+                                    <ManageAccountsIcon
+                                        fontSize="medium"
+                                        className="text-white"
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -192,12 +110,12 @@ export default function Authenticated({
 
                     <div className="pt-4 pb-1 border-t border-gray-200">
                         <div className="px-4">
-                            <div className="font-medium text-base text-gray-800">
+                            {/* <div className="font-medium text-base text-gray-800">
                                 {user.name}
                             </div>
                             <div className="font-medium text-sm text-gray-500">
                                 {user.email}
-                            </div>
+                            </div> */}
                         </div>
 
                         <div className="mt-3 space-y-1">
@@ -215,16 +133,28 @@ export default function Authenticated({
                     </div>
                 </div>
             </nav>
+            <div className="w-full flex">
+                <div class="w-full flex gap-4">
+                    <AdminSideNav
+                        setTableCategory={setTableCategory}
+                        category={tableCategory}
+                    />
 
-            {header && (
-                <header className="bg-white shadow">
-                    <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {header}
-                    </div>
-                </header>
-            )}
-
-            <main className="w-full">{children}</main>
+                    {tableCategory == "inventory" ? (
+                        <div class="w-full flex justify-center py-10">
+                            <AdminTable initialProducts={products} />
+                        </div>
+                    ) : tableCategory == "riders" ? (
+                        <div class="w-full flex justify-center py-10">
+                            <DeliveryRiderTable initialRiders={riders} />
+                        </div>
+                    ) : (
+                        <div class="w-full flex justify-center py-10">
+                            <OrdersTable riders={riders} />
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
     );
 }
