@@ -9,8 +9,6 @@ export default function AdminTable({ initialProducts }) {
     const [products, setProducts] = useState(initialProducts);
     const [loading, setLoading] = useState(false);
 
-    const { toast } = useToast();
-
     const handleDelete = (id) => {
         setLoading(true);
         axios
