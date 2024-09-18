@@ -42,10 +42,23 @@ export default function Admin({ auth, products, name, riders }) {
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
                             <div className="flex items-center gap-2 cursor-pointer">
                                 <div className="ml-10 flex gap-2">
-                                    <ManageAccountsIcon
-                                        fontSize="medium"
-                                        className="text-white"
-                                    />
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <ManageAccountsIcon
+                                                fontSize="medium"
+                                                className="text-white"
+                                            />
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-30">
+                                            <ResponsiveNavLink
+                                                method="post"
+                                                href={route("logout")}
+                                                as="button"
+                                            >
+                                                Log Out
+                                            </ResponsiveNavLink>
+                                        </PopoverContent>
+                                    </Popover>
                                 </div>
                             </div>
                         </div>
