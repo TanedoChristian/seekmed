@@ -35,11 +35,26 @@ class ProductController extends Controller
             'STOCK_QUANTITY' => 'required|integer',
             'PRICE' => 'required|numeric',
             'TOTAL_INVENTORY' => 'nullable|integer',
-            'IS_WHOLESALE' => 'nullable|boolean',
+            'IS_WHOLESALE' => 'nullable',
             'EXPIRY_DATE' => 'nullable|date',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $product = Product::create($request->all());
+
+            $imageBlob = file_get_contents($request->file('image'));
+
+
+        $product = Product::create([
+            'PRODUCT_NAME' => $request->PRODUCT_NAME,
+            'DESCRIPTION' => $request->DESCRIPTION,
+            'STOCK_QUANTITY' => $request->STOCK_QUANTITY,
+            'PRICE' => $request->PRICE,
+            'TOTAL_INVENTORY' => $request->TOTAL_INVENTORY,
+            'IS_WHOLESALE' => 0,
+            'EXPIRY_DATE' => $request->EXPIRY_DATE,
+            'image' => $imageBlob,
+        ]);
+
         return response()->json($product);
     }
 

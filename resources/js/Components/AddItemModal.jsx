@@ -21,19 +21,38 @@ export default function AddItemsModal({ setProducts }) {
     } = useForm();
 
     const [isOpen, setIsOpen] = useState(false);
+    const [image, setImage] = useState(null);
 
     const onSubmit = async (data) => {
         data.IS_WHOLESALE = true;
         data.TOTAL_INVENTORY = data.STOCK_QUANTITY;
+
+        const formData = new FormData();
+        Object.keys(data).forEach((key) => {
+            formData.append(key, data[key]);
+        });
+        formData.append("image", image);
+
         try {
-            await axios.post("/products", data).then(({ data }) => {
-                setProducts((prevProducts) => [...prevProducts, data]);
-                setIsOpen(false);
-                reset();
+            const response = await axios.post("/products", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
             });
+            setProducts((prevProducts) => [...prevProducts, response.data]);
+            setIsOpen(false);
+            reset();
+            setImage(null);
         } catch (error) {
             console.error("Error adding product:", error);
         }
+    };
+
+    const handleImageChange = (e) => {
+        if (e.target.files[0]) {
+            setImage(e.target.files[0]);
+        }
+        console.log(image);
     };
 
     return (
@@ -266,6 +285,7 @@ export default function AddItemsModal({ setProducts }) {
                                         id="dropzone-file"
                                         type="file"
                                         class="hidden"
+                                        onChange={handleImageChange}
                                     />
                                 </label>
                             </div>

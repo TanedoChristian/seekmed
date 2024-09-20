@@ -15,7 +15,7 @@ class DeliveryRiderController extends Controller
 
     public function store(Request $request){
         $rider = DeliveryRider::create($request->all());
-        return response()->json(['message' => 'Success'], 200);
+        return response()->json($rider);
     }
 
     public function update(Request $request, $id)

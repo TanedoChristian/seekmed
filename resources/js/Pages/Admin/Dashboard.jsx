@@ -9,11 +9,11 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import { useState } from "react";
 import DeliveryRiderTable from "@/Components/DeliveryRiderTable";
 import OrdersTable from "@/Components/OrdersTable";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shadcdn/ui/popover";
 
 export default function Admin({ auth, products, name, riders }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
-
     const [tableCategory, setTableCategory] = useState("inventory");
 
     return (
