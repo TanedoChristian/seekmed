@@ -3,19 +3,29 @@ import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 import AddRiderModal from "./AddRiderModal";
 import { useState } from "react";
 import UpdateDeliveryRiderModal from "./UpdateDeliveryRiderModal";
+import Swal from "sweetalert2";
+import { CircularProgress } from "@mui/material";
 
 export default function DeliveryRiderTable({ initialRiders }) {
     const [riders, setRiders] = useState(initialRiders);
     const [loading, setLoading] = useState(false);
+
     const handleDelete = (id) => {
-        setLoading(false);
+        setLoading(true);
         axios
             .delete(`/api/rider/${id}`)
             .then(() => {
                 setRiders((prevRiders) =>
                     prevRiders.filter((rider) => rider.id !== id)
                 );
-                setLoading(true);
+
+                Swal.fire({
+                    title: "Deleted!",
+                    text: `Successfully deleted`,
+                    icon: "success",
+                });
+
+                setLoading(false);
             })
             .catch((error) => {
                 console.error("Error deleting rider:", error);

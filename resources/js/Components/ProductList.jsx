@@ -1,6 +1,11 @@
 import ItemCard from "./ItemCard";
 
-export default function ProductList({ items, handleDialogOpen }) {
+export default function ProductList({
+    products,
+    handleDialogOpen,
+    activeCarts,
+    setActiveCarts,
+}) {
     return (
         <section class="py-20">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -8,11 +13,15 @@ export default function ProductList({ items, handleDialogOpen }) {
                     Available Products
                 </h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-xl:gap-4 gap-6 font-manrope">
-                    {items.map((item) => (
+                    {products.map((item) => (
                         <ItemCard
-                            item={item.item}
-                            img={item.img}
-                            type={item.type}
+                            item={item.PRODUCT_NAME}
+                            img={item.image}
+                            type={item.IS_WHOLESALE}
+                            price={item.PRICE}
+                            stock={item.STOCK_QUANTITY}
+                            activeCarts={activeCarts}
+                            setActiveCarts={setActiveCarts}
                         />
                     ))}
                 </div>

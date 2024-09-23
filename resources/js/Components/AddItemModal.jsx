@@ -12,6 +12,7 @@ import axios from "axios";
 import { Button, Divider } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
 export default function AddItemsModal({ setProducts }) {
     const {
         register,
@@ -40,6 +41,13 @@ export default function AddItemsModal({ setProducts }) {
                 },
             });
             setProducts((prevProducts) => [...prevProducts, response.data]);
+
+            Swal.fire({
+                title: "Added!",
+                text: `Product is added to the database`,
+                icon: "success",
+            });
+
             setIsOpen(false);
             reset();
             setImage(null);
@@ -279,7 +287,9 @@ export default function AddItemsModal({ setProducts }) {
                                         PNG, JPG or PDF, smaller than 15MB
                                     </span>
                                     <h6 class="text-center text-gray-900 text-sm font-medium leading-5">
-                                        Upload Product Image
+                                        {image
+                                            ? image.name
+                                            : "Upload Product Image"}
                                     </h6>
                                     <input
                                         id="dropzone-file"

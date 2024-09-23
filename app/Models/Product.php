@@ -19,5 +19,6 @@ class Product extends Model
         'TOTAL_INVENTORY',
         'IS_WHOLESALE',
         'EXPIRY_DATE',
+        'image'
     ];
 }

@@ -35,6 +35,8 @@ export default function Authenticated({
     children,
     open,
     setIsOpen,
+    activeCarts,
+    setActiveCarts,
 }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
@@ -67,6 +69,8 @@ export default function Authenticated({
                                 <CheckoutDialog
                                     open={open}
                                     setIsOpen={setIsOpen}
+                                    activeCarts={activeCarts}
+                                    setActiveCarts={setActiveCarts}
                                     title="Checkout"
                                     imgSrc="https://atchealthcare.com.ph/wp-content/uploads/2020/03/Robust-Extreme-.png"
                                     itemName="Centeral Catheter Kit"

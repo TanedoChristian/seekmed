@@ -28,35 +28,43 @@ class ProductController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'PRODUCT_NAME' => 'required|string|max:255',
-            'DESCRIPTION' => 'nullable|string',
-            'STOCK_QUANTITY' => 'required|integer',
-            'PRICE' => 'required|numeric',
-            'TOTAL_INVENTORY' => 'nullable|integer',
-            'IS_WHOLESALE' => 'nullable',
-            'EXPIRY_DATE' => 'nullable|date',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+{
+    // Validate the request
+    $validatedData = $request->validate([
+        'PRODUCT_NAME' => 'required|string|max:255',
+        'DESCRIPTION' => 'required|string',
+        'STOCK_QUANTITY' => 'required|numeric',
+        'PRICE' => 'required|numeric',
+        'TOTAL_INVENTORY' => 'required|numeric',
+        'EXPIRY_DATE' => 'required|date',
+        'image' => 'required|image', // Validate image upload
+    ]);
 
+    // Handle file upload
+    if ($request->hasFile('image')) {
+        // Store the image in the 'products' directory within the public disk
+        $imagePath = $request->file('image')->store('products', 'public'); // Store image and get path
 
-            $imageBlob = file_get_contents($request->file('image'));
-
-
-        $product = Product::create([
-            'PRODUCT_NAME' => $request->PRODUCT_NAME,
-            'DESCRIPTION' => $request->DESCRIPTION,
-            'STOCK_QUANTITY' => $request->STOCK_QUANTITY,
-            'PRICE' => $request->PRICE,
-            'TOTAL_INVENTORY' => $request->TOTAL_INVENTORY,
-            'IS_WHOLESALE' => 0,
-            'EXPIRY_DATE' => $request->EXPIRY_DATE,
-            'image' => $imageBlob,
-        ]);
-
-        return response()->json($product);
+        // Generate a URL for the stored image
+        $imageUrl = asset('storage/' . $imagePath); // Create a URL to access the image
+    } else {
+        return response()->json(['error' => 'Image not provided'], 400);
     }
+
+
+    $product = Product::create([
+        'PRODUCT_NAME' => $request->PRODUCT_NAME,
+        'DESCRIPTION' => $request->DESCRIPTION,
+        'STOCK_QUANTITY' => $request->STOCK_QUANTITY,
+        'PRICE' => $request->PRICE,
+        'TOTAL_INVENTORY' => $request->TOTAL_INVENTORY,
+        'IS_WHOLESALE' => 0,
+        'EXPIRY_DATE' => $request->EXPIRY_DATE,
+        'image' => $imageUrl, // Store the URL instead of path
+    ]);
+
+    return response()->json($product);
+}
 
     public function destroy($id)
     {

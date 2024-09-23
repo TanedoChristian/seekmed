@@ -11,6 +11,7 @@ import { ShoppingCart } from "@mui/icons-material";
 
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import { Divider } from "@mui/material";
+import Swal from "sweetalert2";
 export default function CheckoutDialog({
     title,
     imageSrc,
@@ -19,7 +20,50 @@ export default function CheckoutDialog({
     quantity,
     open,
     setIsOpen,
+    activeCarts,
+    setActiveCarts,
 }) {
+    const removeFromCart = (index) => {
+        setActiveCarts((prevCarts) => {
+            const updatedCarts = [...prevCarts];
+            updatedCarts.splice(index, 1);
+            return updatedCarts;
+        });
+
+        Swal.fire({
+            title: "Removed!",
+            text: `${item} has been removed from your cart.`,
+            icon: "success",
+        });
+    };
+
+    const subtotal = activeCarts.reduce(
+        (total, cartItem) => total + cartItem.price * cartItem.quantity,
+        0
+    );
+
+    const postActiveCarts = async () => {
+        const response = axios
+            .post("/api/orders", {
+                user_id: 1,
+                active_carts: activeCarts,
+            })
+            .then((data) => {
+                Swal.fire({
+                    title: "Added!",
+                    text: `Added to order.`,
+                    icon: "success",
+                });
+            })
+            .catch((err) => {
+                Swal.fire({
+                    title: "Error!",
+                    text: `Something went wrong`,
+                    icon: "error",
+                });
+            });
+    };
+
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -31,34 +75,45 @@ export default function CheckoutDialog({
                     Checkout
                 </div>
                 <div className="p-2">
-                    <div className="flex gap-3 justify-between px-2 mb-2 items-center">
-                        <img
-                            src={imageSrc}
-                            alt=""
-                            className="w-10 h-10 object-cover"
-                        />
-                        <div className="">
-                            <h1 className="font-semibold text-md">
-                                {itemName}
-                            </h1>
-                        </div>
-                        <div className="flex gap-3 items-center">
-                            <button className="outline-none font-semibold">
-                                -
-                            </button>
-                            <span className="outline-none">2</span>
-                            <button className="outline-none font-semibold">
-                                +
-                            </button>
-                        </div>
-                        <div className="">
-                            <h1 className="font-semibold text-md">$50.00</h1>
-                        </div>
+                    {activeCarts.length > 0 ? (
+                        activeCarts.map((item, index) => (
+                            <div
+                                key={index}
+                                className="flex items-center justify-between px-2 mb-2"
+                            >
+                                <img
+                                    src={item.img}
+                                    alt=""
+                                    className="w-10 h-10 object-cover"
+                                />
+                                <div className="flex-grow mx-2">
+                                    <h1 className="font-semibold text-md">
+                                        {item.item}
+                                    </h1>
+                                </div>
+                                <span className="outline-none">
+                                    x{item.quantity}
+                                </span>
+                                <div className="">
+                                    <h1 className="font-semibold text-md">
+                                        ₱
+                                        {(item.price * item.quantity).toFixed(
+                                            2
+                                        )}
+                                    </h1>
+                                </div>
 
-                        <button className="px-3 py-1 text-sm  text-red-500 font-semibold">
-                            Remove
-                        </button>
-                    </div>
+                                <button
+                                    className="px-3 py-1 text-sm text-red-500 font-semibold"
+                                    onClick={() => removeFromCart(index)}
+                                >
+                                    Remove
+                                </button>
+                            </div>
+                        ))
+                    ) : (
+                        <p className="text-gray-500">Empty cart.</p>
+                    )}
                     <Divider />
                     <p className="p-2 text-sm">Add more items</p>
                     <Divider />
@@ -86,11 +141,11 @@ export default function CheckoutDialog({
                     <div className="p-2">
                         <div className="flex justify-between px-3">
                             <p className="text-sm">Subtotal</p>
-                            <p className="">P 7,740.00</p>
+                            <p className="">₱ {subtotal.toFixed(2)}</p>
                         </div>
                         <div className="flex justify-between px-3">
                             <p className="text-sm">Delivery Fee</p>
-                            <p className="">P 70.00</p>
+                            <p className="">₱ 50.00</p>
                         </div>
                     </div>
 
@@ -98,8 +153,17 @@ export default function CheckoutDialog({
                     <div className="p-2">
                         <div className="flex justify-between px-3">
                             <p className="text-sm">Total Order:</p>
-                            <p className="">P 7,740.00</p>
+                            <p className="">₱ {subtotal + 50}</p>
                         </div>
+                    </div>
+
+                    <div className="flex justify-end p-3">
+                        <button
+                            className="bg-main text-sm"
+                            onClick={postActiveCarts}
+                        >
+                            Submit
+                        </button>
                     </div>
                 </div>
             </DialogContent>

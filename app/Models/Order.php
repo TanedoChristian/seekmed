@@ -18,6 +18,5 @@ class Order extends Model
         'PRICE',
         'STATUS',
         'USER_ID',
-        'ADMIN_ID',
     ];
 }

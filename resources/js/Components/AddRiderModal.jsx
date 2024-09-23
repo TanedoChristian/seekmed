@@ -12,6 +12,7 @@ import axios from "axios";
 import { Button, Divider } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
 
 export default function AddRiderModal({ setRiders }) {
     const {
@@ -27,6 +28,13 @@ export default function AddRiderModal({ setRiders }) {
         try {
             await axios.post("/api/rider", data).then(({ data }) => {
                 setRiders((prevRiders) => [...prevRiders, data]);
+
+                Swal.fire({
+                    title: "Added!",
+                    text: `Rider is added to the database`,
+                    icon: "success",
+                });
+
                 setIsOpen(false);
                 reset();
             });

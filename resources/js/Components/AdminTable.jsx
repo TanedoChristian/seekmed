@@ -4,8 +4,9 @@ import { TrashIcon } from "@radix-ui/react-icons";
 import { useForm } from "@inertiajs/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
-export default function AdminTable({ initialProducts }) {
+export default function wAdminTable({ initialProducts }) {
     const [products, setProducts] = useState(initialProducts);
     const [loading, setLoading] = useState(false);
 
@@ -17,6 +18,12 @@ export default function AdminTable({ initialProducts }) {
                 setProducts((prevProducts) =>
                     prevProducts.filter((product) => product.id !== id)
                 );
+
+                Swal.fire({
+                    title: "Deleted!",
+                    text: `Successfully deleted`,
+                    icon: "success",
+                });
 
                 setLoading(false);
             })
