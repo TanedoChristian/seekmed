@@ -11,6 +11,7 @@ import { ShoppingCart } from "@mui/icons-material";
 
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import { Divider } from "@mui/material";
+import { useState } from "react";
 import Swal from "sweetalert2";
 export default function CheckoutDialog({
     title,
@@ -23,6 +24,8 @@ export default function CheckoutDialog({
     activeCarts,
     setActiveCarts,
 }) {
+    const [isOpen, setIsOpen] = useState(false);
+
     const removeFromCart = (index) => {
         setActiveCarts((prevCarts) => {
             const updatedCarts = [...prevCarts];
@@ -49,6 +52,8 @@ export default function CheckoutDialog({
                 active_carts: activeCarts,
             })
             .then((data) => {
+                setIsOpen(false);
+
                 Swal.fire({
                     title: "Added!",
                     text: `Added to order.`,
@@ -56,6 +61,7 @@ export default function CheckoutDialog({
                 });
             })
             .catch((err) => {
+                setIsOpen(false);
                 Swal.fire({
                     title: "Error!",
                     text: `Something went wrong`,
@@ -65,7 +71,7 @@ export default function CheckoutDialog({
     };
 
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <ShoppingCart fontSize="medium" className="text-white" />
             </DialogTrigger>
@@ -159,7 +165,7 @@ export default function CheckoutDialog({
 
                     <div className="flex justify-end p-3">
                         <button
-                            className="bg-main text-sm"
+                            className="bg-main text-sm text-white px-5 py-1.5"
                             onClick={postActiveCarts}
                         >
                             Submit
