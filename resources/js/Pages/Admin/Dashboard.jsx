@@ -1,5 +1,4 @@
-import AdminSideNav from "@/Components/AdminSideNav";
-import AdminTable from "@/Components/AdminTable";
+import AdminSideNav from "@/Components/Admin/AdminSideNav";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
 import { Input } from "@/shadcdn/ui/input";
@@ -7,9 +6,10 @@ import { Input } from "@/shadcdn/ui/input";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 
 import { useState } from "react";
-import DeliveryRiderTable from "@/Components/DeliveryRiderTable";
-import OrdersTable from "@/Components/OrdersTable";
+import DeliveryRiderTable from "@/Components/Admin/DeliveryRiderTable";
+import OrdersTable from "@/Components/Admin/OrdersTable";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shadcdn/ui/popover";
+import AdminTable from "@/Components/Admin/AdminTable";
 
 export default function Admin({ auth, products, name, riders }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =

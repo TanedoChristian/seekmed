@@ -13,7 +13,9 @@ import { Button, Divider } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Pencil1Icon } from "@radix-ui/react-icons";
-export default function UpdateDeliveryRiderModal({ setRiders, rider }) {
+import { useDispatch } from "react-redux";
+import { updateDeliveryRider } from "@/state/deliveryRiderSlice";
+export default function UpdateDeliveryRiderModal({ rider }) {
     const {
         register,
         handleSubmit,
@@ -21,19 +23,15 @@ export default function UpdateDeliveryRiderModal({ setRiders, rider }) {
     } = useForm();
 
     const [isOpen, setIsOpen] = useState(false);
-
+    const dispatch = useDispatch();
     const onSubmit = async (data) => {
-        try {
-            await axios.put(`/api/rider/${rider.id}`, data);
-            setRiders((prevRiders) =>
-                prevRiders.map((r) =>
-                    r.id === rider.id ? { ...r, ...data } : r
-                )
-            );
+        const newData = {
+            id: rider.id,
+            ...data,
+        };
+        dispatch(updateDeliveryRider(newData)).then(() => {
             setIsOpen(false);
-        } catch (error) {
-            console.error("Error updating rider:", error);
-        }
+        });
     };
 
     return (

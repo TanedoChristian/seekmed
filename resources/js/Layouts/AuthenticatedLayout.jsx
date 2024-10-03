@@ -28,6 +28,8 @@ import {
 import { Label } from "@/shadcdn/ui/label";
 import OrderDialog from "@/Components/OrderDialog";
 import CheckoutDialog from "@/Components/CheckoutDialog";
+import { useDispatch } from "react-redux";
+import { setDashboardCategory } from "@/state/userSlice";
 
 export default function Authenticated({
     user,
@@ -37,9 +39,12 @@ export default function Authenticated({
     setIsOpen,
     activeCarts,
     setActiveCarts,
+    setDashboardPage,
 }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
+
+    const dispatch = useDispatch();
 
     return (
         <div className="min-h-screen bg-gray-100 w-full">
@@ -48,7 +53,11 @@ export default function Authenticated({
                     <div className="flex justify-between h-16 items-center">
                         <div className="flex">
                             <div className="shrink-0 flex items-center">
-                                <Link href="/">
+                                <Link
+                                    onClick={() => {
+                                        dispatch(setDashboardCategory(0));
+                                    }}
+                                >
                                     <h1 className="text-3xl font-extrabold text-white">
                                         SEEKMED
                                     </h1>
@@ -76,6 +85,7 @@ export default function Authenticated({
                                     itemName="Centeral Catheter Kit"
                                     itemCost="7,500.00"
                                     quantity={5}
+                                    setDashboardPage={setDashboardPage}
                                 />
 
                                 <ChatIcon
@@ -123,6 +133,15 @@ export default function Authenticated({
                                             />
                                         </PopoverTrigger>
                                         <PopoverContent className="w-30">
+                                            <button
+                                                onClick={() => {
+                                                    dispatch(
+                                                        setDashboardCategory(1)
+                                                    );
+                                                }}
+                                            >
+                                                Edit Profile
+                                            </button>
                                             <ResponsiveNavLink
                                                 method="post"
                                                 href={route("logout")}

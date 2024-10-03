@@ -1,8 +1,10 @@
 import ItemCard from "@/Components/ItemCard";
 import ProductList from "@/Components/ProductList";
+import EditProfile from "@/Components/Profile/Edit";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function Dashboard({ auth, products }) {
     const [activeCarts, setActiveCarts] = useState([]);
@@ -11,10 +13,15 @@ export default function Dashboard({ auth, products }) {
     const handleDialogOpen = () => {
         setOpen(true);
     };
-
     const handleDialogClose = () => {
         setOpen(false);
     };
+
+    const [dashboardPage, setDashboardPage] = useState(0);
+
+    const dashboardCategory = useSelector(
+        (state) => state.user.dashboardCategory
+    );
 
     return (
         <AuthenticatedLayout
@@ -23,14 +30,20 @@ export default function Dashboard({ auth, products }) {
             onOpenChange={setOpen}
             activeCarts={activeCarts}
             setActiveCarts={setActiveCarts}
+            setDashboardPage={setDashboardPage}
         >
             <Head title="Dashboard" />
-            <ProductList
-                products={products}
-                handleDialogOpen={handleDialogOpen}
-                activeCarts={activeCarts}
-                setActiveCarts={setActiveCarts}
-            />
+
+            {dashboardCategory == 0 ? (
+                <ProductList
+                    products={products}
+                    handleDialogOpen={handleDialogOpen}
+                    activeCarts={activeCarts}
+                    setActiveCarts={setActiveCarts}
+                />
+            ) : (
+                <EditProfile user={auth.user} />
+            )}
         </AuthenticatedLayout>
     );
 }

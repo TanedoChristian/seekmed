@@ -18,5 +18,6 @@ class Order extends Model
         'PRICE',
         'STATUS',
         'USER_ID',
+        'cart_id',
     ];
 }

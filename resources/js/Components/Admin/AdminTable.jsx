@@ -1,24 +1,24 @@
+import { Button, CircularProgress } from "@mui/material";
 import AddItemsModal from "./AddItemModal";
-import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
-import AddRiderModal from "./AddRiderModal";
-import { useState } from "react";
-import UpdateDeliveryRiderModal from "./UpdateDeliveryRiderModal";
+import { TrashIcon } from "@radix-ui/react-icons";
+import { useForm } from "@inertiajs/react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { CircularProgress } from "@mui/material";
+import useDelete from "@/hooks/useDelete";
 
-export default function DeliveryRiderTable({ initialRiders }) {
-    const [riders, setRiders] = useState(initialRiders);
+export default function AdminTable({ initialProducts }) {
+    const [products, setProducts] = useState(initialProducts);
     const [loading, setLoading] = useState(false);
 
     const handleDelete = (id) => {
         setLoading(true);
         axios
-            .delete(`/api/rider/${id}`)
+            .delete(`/products/${id}`)
             .then(() => {
-                setRiders((prevRiders) =>
-                    prevRiders.filter((rider) => rider.id !== id)
+                setProducts((prevProducts) =>
+                    prevProducts.filter((product) => product.id !== id)
                 );
-
                 Swal.fire({
                     title: "Deleted!",
                     text: `Successfully deleted`,
@@ -28,16 +28,16 @@ export default function DeliveryRiderTable({ initialRiders }) {
                 setLoading(false);
             })
             .catch((error) => {
-                console.error("Error deleting rider:", error);
+                console.error("Error deleting product:", error);
             });
     };
 
     return (
         <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 w-[80%]">
             <div class="flex flex-col">
-                <div className="w-full flex justify-between  p-3 ">
-                    <h1 className="text-3xl font-semibold">Delivery Riders</h1>
-                    <AddRiderModal setRiders={setRiders} />
+                <div className="w-full flex justify-between p-3">
+                    <h1 className="text-3xl font-semibold">Products</h1>
+                    <AddItemsModal setProducts={setProducts} />
                 </div>
                 <div class=" overflow-x-auto">
                     <div class="min-w-full inline-block align-middle">
@@ -49,19 +49,19 @@ export default function DeliveryRiderTable({ initialRiders }) {
                                             scope="col"
                                             class="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize rounded-t-xl"
                                         >
-                                            First Name
+                                            Product Name
                                         </th>
                                         <th
                                             scope="col"
                                             class="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"
                                         >
-                                            Last Name
+                                            Quantity
                                         </th>
                                         <th
                                             scope="col"
                                             class="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"
                                         >
-                                            Email
+                                            Price
                                         </th>
                                         <th
                                             scope="col"
@@ -72,31 +72,25 @@ export default function DeliveryRiderTable({ initialRiders }) {
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-300 ">
-                                    {riders
-                                        ? riders.map((rider) => (
+                                    {products
+                                        ? products.map((product) => (
                                               <tr class="bg-white transition-all duration-500 hover:bg-gray-50">
                                                   <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 ">
-                                                      {rider.FNAME ?? ""}
+                                                      {product.PRODUCT_NAME}
                                                   </td>
                                                   <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
-                                                      {rider.LNAME ?? ""}
+                                                      {product.STOCK_QUANTITY}
                                                   </td>
                                                   <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
-                                                      {rider.EMAIL ?? ""}
+                                                      {product.PRICE}
                                                   </td>
                                                   <td class=" p-5 ">
-                                                      <div class="flex items-center  gap-2 cursor-pointer">
-                                                          <UpdateDeliveryRiderModal
-                                                              rider={rider}
-                                                              setRiders={
-                                                                  setRiders
-                                                              }
-                                                          />
+                                                      <div class="flex items-center gap-1">
                                                           <button
                                                               class="p-2 rounded-full  group transition-all duration-500  flex item-center"
                                                               onClick={() =>
                                                                   handleDelete(
-                                                                      rider.id
+                                                                      product.id
                                                                   )
                                                               }
                                                           >

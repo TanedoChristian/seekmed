@@ -1,30 +1,22 @@
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
-    DialogFooter,
     DialogHeader,
-    DialogTitle,
     DialogTrigger,
 } from "@/shadcdn/ui/dialog";
+import { setDashboardCategory } from "@/state/userSlice";
 import { ShoppingCart } from "@mui/icons-material";
 
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import { Divider } from "@mui/material";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+
 import Swal from "sweetalert2";
-export default function CheckoutDialog({
-    title,
-    imageSrc,
-    itemName,
-    itemCost,
-    quantity,
-    open,
-    setIsOpen,
-    activeCarts,
-    setActiveCarts,
-}) {
+
+export default function CheckoutDialog({ activeCarts, setActiveCarts }) {
     const [isOpen, setIsOpen] = useState(false);
+
+    const dispatch = useDispatch();
 
     const removeFromCart = (index) => {
         setActiveCarts((prevCarts) => {
@@ -46,28 +38,20 @@ export default function CheckoutDialog({
     );
 
     const postActiveCarts = async () => {
-        const response = axios
-            .post("/api/orders", {
-                user_id: 1,
-                active_carts: activeCarts,
-            })
-            .then((data) => {
-                setIsOpen(false);
+        console.log(activeCarts);
 
-                Swal.fire({
-                    title: "Added!",
-                    text: `Added to order.`,
-                    icon: "success",
-                });
-            })
-            .catch((err) => {
-                setIsOpen(false);
-                Swal.fire({
-                    title: "Error!",
-                    text: `Something went wrong`,
-                    icon: "error",
-                });
+        activeCarts.map((active) => {
+            console.log(active.id);
+
+            axios.post("/api/carts", active).then((data) => {
+                console.log(data);
             });
+        });
+    };
+
+    const handleDashboardCategory = () => {
+        setIsOpen(false);
+        dispatch(setDashboardCategory(1));
     };
 
     return (
@@ -125,7 +109,12 @@ export default function CheckoutDialog({
                     <Divider />
                     <div className="flex justify-between p-2 text-sm">
                         <p>Sanciangko St. University of Cebu Main Campus</p>
-                        <p className="text-sm"> Edit Address</p>
+                        <button
+                            className="text-sm cursor-pointer outline-none"
+                            onClick={handleDashboardCategory}
+                        >
+                            Edit Address
+                        </button>
                     </div>
 
                     <div className="flex flex-col justify-center p-2 text-sm">
