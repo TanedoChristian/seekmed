@@ -91,15 +91,12 @@ export default function Authenticated({
                                 <ChatIcon
                                     fontSize="medium"
                                     className="text-white"
+                                    onClick={() => {
+                                        dispatch(setDashboardCategory(3));
+                                    }}
                                 />
 
-                                <OrderDialog
-                                    title="Order History"
-                                    imgSrc="https://atchealthcare.com.ph/wp-content/uploads/2020/03/Robust-Extreme-.png"
-                                    itemName="Centeral Catheter Kit"
-                                    itemCost="7,500.00"
-                                    quantity={5}
-                                />
+                                <OrderDialog user={user} />
 
                                 <MyLocationIcon
                                     fontSize="medium"

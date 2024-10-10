@@ -3,10 +3,16 @@ import Map from "../Location/Map";
 import { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { setOrder } from "@/state/orderSlice";
 
-export default function Order({ orders }) {
+export default function Order({ orders, setTableCategory }) {
     const [tempOrders, setOrders] = useState(orders);
     const [isLoading, setIsLoading] = useState(true);
+
+    const dispatch = useDispatch();
+
     useEffect(() => {
         const fetchCoordinates = async () => {
             try {
@@ -51,6 +57,18 @@ export default function Order({ orders }) {
         fetchCoordinates();
     }, []);
 
+    const handleAccept = (order) => {
+        console.log(order);
+        axios.post("/api/accept-orders", order).then((data) => {
+            Swal.fire({
+                icon: "success",
+                text: `Accepted order id: ${order.order_id}`,
+            });
+            dispatch(setOrder(order));
+            setTableCategory("chat");
+        });
+    };
+
     return (
         <section class="p-10 relative">
             <div class="w-full max-w-8xl mx-auto px-4 md:px-8">
@@ -64,7 +82,7 @@ export default function Order({ orders }) {
                             All Order
                         </li>
                         <li class="font-medium text-lg leading-8 cursor-pointer text-black transition-all duration-500 hover:text-indigo-600">
-                            Summary
+                            On-Going
                         </li>
                         <li class="font-medium text-lg leading-8 cursor-pointer text-black transition-all duration-500 hover:text-indigo-600">
                             Completed
@@ -140,7 +158,7 @@ export default function Order({ orders }) {
                                               <Map
                                                   lat={order.latitude}
                                                   lon={order.longitude}
-                                                  orders={orders}
+                                                  order={order}
                                               />
                                           ) : (
                                               <div className="flex items-center justify-center">
@@ -176,7 +194,12 @@ export default function Order({ orders }) {
                                               </p>
                                           </div>
                                           <div class="flex gap-3 justify-center items-start max-sm:items-center">
-                                              <button className="text-white bg-main px-7 py-1.5 shadow-md rounded-sm">
+                                              <button
+                                                  className="text-white bg-main px-7 py-1.5 shadow-md rounded-sm"
+                                                  onClick={() =>
+                                                      handleAccept(order)
+                                                  }
+                                              >
                                                   Accept
                                               </button>
                                           </div>

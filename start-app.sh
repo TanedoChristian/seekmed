@@ -1,5 +1,5 @@
 #!/bin/bash
-
+./vendor/bin/sail down
 # Step 1: Start the containers in detached mode
 ./vendor/bin/sail up -d
 

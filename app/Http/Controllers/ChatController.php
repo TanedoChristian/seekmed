@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\MessageEvent;
 use Illuminate\Http\Request;
 use Pusher\Pusher;
 
@@ -10,10 +9,40 @@ class ChatController extends Controller
 {
     public function sendMessage(Request $request)
     {
-        $message = $request->input('message');
-        $user = $request->input('user');
+        try {
+            $message = $request->input('message');
+            $user = $request->input('user');
+            $channelId = $request->input('channelId', 'default');
+
+            $pusher = new Pusher(
+                '0f60d240a7e37c6b2818',
+                '7e581cbd1c107cd7cdb4',
+                '1874365',
+                [
+                    'cluster' => 'ap1',
+                    'useTLS' => true
+                ]
+            );
+
+            $channelName = "chat-channel-{$channelId}";
+
+            $pusher->trigger($channelName, 'my-event', [
+                'message' => $message,
+                'user' => $user,
+                'channelId' => $channelId
+            ]);
 
 
-        return response()->json(['status' => 'Message sent!']);
+
+            return response()->json([
+                'status' => 'Message sent!',
+                'channel' => $channelName
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }

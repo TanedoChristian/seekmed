@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import Pusher from "pusher-js";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import MyMap from "./Location/MapRealtime";
+import OrderDialog from "./OrderDialog";
+import OrderChatDialog from "./Rider/OrderChatDialog";
 
-const MessageBox = () => {
+const MessageBox = ({ user }) => {
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState("");
-
-    const orders = useSelector((state) => state.order);
 
     useEffect(() => {
         const pusher = new Pusher("0f60d240a7e37c6b2818", {
@@ -16,13 +15,13 @@ const MessageBox = () => {
             encrypted: true,
         });
 
-        const channel = pusher.subscribe(`chat-channel-${orders.user_id}`);
+        const channel = pusher.subscribe(`chat-channel-${user.id}`);
         channel.bind("my-event", (data) => {
             setMessages((prev) => [...prev, data]);
         });
 
         return () => {
-            pusher.unsubscribe(`chat-channel-${orders.user_id}`);
+            pusher.unsubscribe(`chat-channel-${user.id}`);
             pusher.disconnect();
         };
     }, []);
@@ -31,24 +30,25 @@ const MessageBox = () => {
         if (inputValue.trim() === "") return;
         const messageData = {
             message: inputValue,
-            user: "B",
-            channelId: orders.user_id,
+            user: "A",
+            channelId: user.id,
         };
         await axios.post("/message", messageData);
+
         setInputValue("");
     };
 
     return (
-        <div className="flex justify-between h-[92vh]">
-            <div className="w-[70%] overflow-hidden">
-                <MyMap lat={orders.latitude} lon={orders.longitude} />
+        <div className="w-full flex  bg-white">
+            <div className="w-[70%]">
+                <OrderChatDialog user={user} />
             </div>
-            <div className="flex flex-col flex-auto h-full p-6 w-[30%]">
+            <div className="flex flex-col flex-auto min-h-full p-6">
                 <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
-                    <div className="flex flex-col h-full overflow-x-auto mb-4">
-                        <div className="flex flex-col h-full">
+                    <div className="flex flex-col h-full overflow-y-auto mb-4">
+                        <div className="flex flex-col h-full ">
                             {messages.map((msg, index) =>
-                                msg.user == "B" ? (
+                                msg.user == "A" ? (
                                     <div className="w-full flex  mt-2 justify-end gap-3 items-center p-2">
                                         <div className="relative py-2 px-4 shadow rounded-xl bg-white text-gray-900">
                                             <div>{msg.message}</div>
@@ -79,17 +79,16 @@ const MessageBox = () => {
                         </div>
                     </div>
                     <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
-                        <div className="flex-grow ml-4">
-                            <input
-                                type="text"
-                                value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
-                                className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
-                            />
-                        </div>
+                        <input
+                            type="text"
+                            value={inputValue}
+                            onChange={(e) => setInputValue(e.target.value)}
+                            placeholder="Type your message..."
+                            className="flex-grow border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
+                        />
                         <button
                             onClick={handleSendMessage}
-                            className="ml-4 flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0"
+                            className="ml-4 flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1"
                         >
                             <span>Send</span>
                         </button>

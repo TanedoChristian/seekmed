@@ -26,12 +26,22 @@ Route::get('/', function() {
 
 Route::post('/products', [ProductController::class, 'store']);
 Route::delete('/products/{id}', [ProductController::class, 'destroy']);
-Route::get('/rider/dashboard', [RiderController::class, 'index']);
 
+
+
+Route::get('/register/rider', [RiderController::class, 'register']);
+
+
+Route::middleware('auth:rider')->group(function (){
+    Route::get('/rider/dashboard', [RiderController::class, 'index'])->name('rider.dashboard');
+});
 
 
 
 Route::prefix('api')->group(function() {
+
+    Route::get('/customer/orders', [DashboardController::class, 'getOrders']);
+
     Route::get('/products', [ProductController::class, 'getAll']);
     Route::get('/rider', [DeliveryRiderController::class, 'index']);
     Route::post('/rider', [DeliveryRiderController::class, 'store']);
@@ -40,8 +50,10 @@ Route::prefix('api')->group(function() {
     Route::post('/orders', [OrderController::class, 'store']);
     Route::post('/carts', [CartItemController::class, 'store']);
     Route::post('/messages', [MessageController::class, 'store']);
-
     Route::put('/users/{id}', [UserController::class, 'update']);
+
+    Route::get('customer/carts/{id}', [RiderController::class, 'getCustomerCarts']);
+    Route::post('accept-orders', [RiderController::class, 'acceptOrders']);
 
 });
 

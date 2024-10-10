@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use Illuminate\Http\Request;
 use App\Models\Order; // Make sure to import your Order model
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -15,17 +17,16 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $totalAmount = 0;
-        foreach ($request->active_carts as $cartItem) {
-            $totalAmount += $cartItem['price'] * $cartItem['quantity'];
-        }
+
+        $cartId = Cart::where('user_id', Auth::id())->value('id');
+        $userId = Auth::id();
 
         $order = Order::create([
-            'TOTAL_AMOUNT' => $totalAmount,
-            'PAYMENT_METHOD' => 'COD',
-            'USER_ID' => $request->user_id,
-            'ORDER_DATE' => now(),
-            'PRICE' => $totalAmount,
+            'PAYMENT_METHOD' => $request->PAYMENT_METHOD,
+            'USER_ID' => $userId,
+            'cart_id' => $cartId,
+            'address' => $request->address,
+            'contact_number' => $request->contact_number
         ]);
 
         return response()->json(['message' => 'Order created successfully!', 'order_id' => $order->id], 201);

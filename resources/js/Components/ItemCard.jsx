@@ -103,6 +103,8 @@ const ItemCard = ({
                 ...prevProduct,
                 quantity: 0,
             }));
+
+            
         } else {
             Swal.fire({
                 title: "Error!",

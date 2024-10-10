@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\RegisteredRiderController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
@@ -15,15 +16,17 @@ Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
 
-    Route::post('register', [RegisteredUserController::class, 'store']);
+    Route::post('register-rider', [RegisteredRiderController::class, 'store'])->name('register-rider');
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
                 ->name('login');
 
+    Route::get('rider/login', [AuthenticatedSessionController::class, 'riderLogin']);
     Route::get('admin/login', [AuthenticatedSessionController::class, 'createAdmin']);
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
     Route::post('login/admin', [AuthenticatedSessionController::class, 'storeAdmin']);
+    Route::post('login/rider', [AuthenticatedSessionController::class, 'storeRider'])->name('login-rider');
 
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
@@ -61,3 +64,9 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
 });
+
+Route::post('logout/rider', [AuthenticatedSessionController::class, 'destroyRider'])
+    ->name('logout.rider')
+    ->middleware('auth:rider');
+
+

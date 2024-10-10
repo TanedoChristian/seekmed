@@ -33,6 +33,15 @@ class AuthenticatedSessionController extends Controller
         ]);
     }
 
+    public function riderLogin(): Response
+    {
+        return Inertia::render('Auth/RiderLogin', [
+            'canResetPassword' => Route::has('password.request'),
+            'status' => session('status'),
+        ]);
+    }
+
+
     /**
      * Handle an incoming authentication request.
      */
@@ -52,6 +61,29 @@ class AuthenticatedSessionController extends Controller
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
+
+    public function storeRider(Request $request): RedirectResponse
+{
+    $credentials = $request->validate([
+        'EMAIL' => ['required'],  // Changed from 'email' to 'EMAIL'
+        'password' => ['required'],
+    ]);
+
+    if (Auth::guard('rider')->attempt($credentials)) {
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('rider.dashboard'));
+    }
+
+    return back()
+        ->withInput($request->only('EMAIL'))  // Changed from 'email' to 'EMAIL'
+        ->withErrors([
+            'EMAIL' => 'The provided credentials do not match our records.',  // Changed error key
+        ]);
+}
+
+
+
     public function storeAdmin(LoginRequest $request): RedirectResponse
     {
         // $request->authenticate();
@@ -67,11 +99,18 @@ class AuthenticatedSessionController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
-
+        Auth::guard('rider')->logout();
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
-
         return redirect('/');
+    }
+
+    public function destroyRider(Request $request): RedirectResponse
+    {
+        Auth::guard('web')->logout();
+        Auth::guard('rider')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('rider/login');
     }
 }

@@ -4,7 +4,40 @@ import {
     DialogHeader,
     DialogTrigger,
 } from "@/shadcdn/ui/dialog";
-export default function OrderDetailsModal() {
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+export default function OrderDetailsModal({ order }) {
+    const [products, setProducts] = useState([]);
+    const [subtotal, setSubtotal] = useState(0);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const { data } = await axios.get(
+                    `/api/customer/carts/${order.order_id}`
+                );
+                setProducts(data);
+                console.log(data);
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        };
+
+        fetchProducts();
+    }, [order.order_id]);
+
+    useEffect(() => {
+        const calculateSubtotal = () => {
+            const total = products.reduce((acc, product) => {
+                return acc + parseFloat(product.price) * product.quantity;
+            }, 0);
+            setSubtotal(total);
+        };
+
+        calculateSubtotal();
+    }, [products]);
+
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -58,78 +91,37 @@ export default function OrderDetailsModal() {
                         </div>
 
                         <div className="w-full h-[20vh] overflow-y-auto overflow-x-hidden mb-10">
-                            <div class="grid grid-cols-1 lg:grid-cols-2 min-[550px]:gap-3 border-t border-gray-200 py-6">
-                                <div class="flex items-center flex-col min-[550px]:flex-row gap-3 min-[550px]:gap-3 w-full max-xl:justify-center max-xl:max-w-xl max-xl:mx-auto">
-                                    <div class="img-box">
-                                        <img
-                                            src="https://pagedone.io/asset/uploads/1701162850.png"
-                                            alt="perfume bottle image"
-                                            class="xl:w-[70px] rounded-md shadow-md border-2 object-cover"
-                                        />
-                                    </div>
-                                    <div class="pro-data w-full max-w-sm ">
-                                        <h5 class="font-semibold   leading-8 text-black max-[550px]:text-center">
-                                            Latest N-5 Perfuam
-                                        </h5>
-                                    </div>
-                                </div>
-                                <div class="flex items-center flex-col min-[550px]:flex-row w-full max-xl:max-w-xl max-xl:mx-auto gap-2 ml-4">
-                                    <h6 class="font-manrope font-bold  leading-9 text-black w-full max-w-[176px] text-center">
-                                        $15.00
-                                    </h6>
-                                    <h6 class="text-indigo-600 ml-5 font-manrope font-bold  leading-9 w-full max-w-[176px] text-center">
-                                        $120.00
-                                    </h6>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 lg:grid-cols-2 min-[550px]:gap-3 border-t border-gray-200 py-6">
-                                <div class="flex items-center flex-col min-[550px]:flex-row gap-3 min-[550px]:gap-3 w-full max-xl:justify-center max-xl:max-w-xl max-xl:mx-auto">
-                                    <div class="img-box">
-                                        <img
-                                            src="https://pagedone.io/asset/uploads/1701162850.png"
-                                            alt="perfume bottle image"
-                                            class="xl:w-[70px] rounded-md shadow-md border-2 object-cover"
-                                        />
-                                    </div>
-                                    <div class="pro-data w-full max-w-sm ">
-                                        <h5 class="font-semibold   leading-8 text-black max-[550px]:text-center">
-                                            Latest N-5 Perfuam
-                                        </h5>
-                                    </div>
-                                </div>
-                                <div class="flex items-center flex-col min-[550px]:flex-row w-full max-xl:max-w-xl max-xl:mx-auto gap-2 ml-4">
-                                    <h6 class="font-manrope font-bold  leading-9 text-black w-full max-w-[176px] text-center">
-                                        $15.00
-                                    </h6>
-                                    <h6 class="text-indigo-600 ml-5 font-manrope font-bold  leading-9 w-full max-w-[176px] text-center">
-                                        $120.00
-                                    </h6>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 lg:grid-cols-2 min-[550px]:gap-3 border-t border-gray-200 py-6">
-                                <div class="flex items-center flex-col min-[550px]:flex-row gap-3 min-[550px]:gap-3 w-full max-xl:justify-center max-xl:max-w-xl max-xl:mx-auto">
-                                    <div class="img-box">
-                                        <img
-                                            src="https://pagedone.io/asset/uploads/1701162850.png"
-                                            alt="perfume bottle image"
-                                            class="xl:w-[70px] rounded-md shadow-md border-2 object-cover"
-                                        />
-                                    </div>
-                                    <div class="pro-data w-full max-w-sm ">
-                                        <h5 class="font-semibold   leading-8 text-black max-[550px]:text-center">
-                                            Latest N-5 Perfuam
-                                        </h5>
-                                    </div>
-                                </div>
-                                <div class="flex items-center flex-col min-[550px]:flex-row w-full max-xl:max-w-xl max-xl:mx-auto gap-2 ml-4">
-                                    <h6 class="font-manrope font-bold  leading-9 text-black w-full max-w-[176px] text-center">
-                                        $15.00
-                                    </h6>
-                                    <h6 class="text-indigo-600 ml-5 font-manrope font-bold  leading-9 w-full max-w-[176px] text-center">
-                                        $120.00
-                                    </h6>
-                                </div>
-                            </div>
+                            {products.length > 0
+                                ? products.map((product) => (
+                                      <div class="grid grid-cols-1 lg:grid-cols-2 min-[550px]:gap-3 border-t border-gray-200 py-6">
+                                          <div class="flex items-center flex-col min-[550px]:flex-row gap-3 min-[550px]:gap-3 w-full max-xl:justify-center max-xl:max-w-xl max-xl:mx-auto">
+                                              <div class="img-box">
+                                                  <img
+                                                      src={product.image.replace(
+                                                          /\\\//g,
+                                                          "/"
+                                                      )}
+                                                      alt="perfume bottle image"
+                                                      className="xl:w-[70px] rounded-md shadow-md border-2 object-cover"
+                                                  />
+                                              </div>
+                                              <div class="pro-data w-full max-w-sm ">
+                                                  <h5 class="font-semibold   leading-8 text-black max-[550px]:text-center">
+                                                      {product.PRODUCT_NAME}
+                                                  </h5>
+                                              </div>
+                                          </div>
+                                          <div class="flex items-center flex-col min-[550px]:flex-row w-full max-xl:max-w-xl max-xl:mx-auto gap-2 ml-4">
+                                              <h6 class="font-manrope font-bold  leading-9 text-black w-full max-w-[176px] text-center">
+                                                  {product.quantity}
+                                              </h6>
+                                              <h6 class="text-indigo-600 ml-5 font-manrope font-bold  leading-9 w-full max-w-[176px] text-center">
+                                                  {product.price}
+                                              </h6>
+                                          </div>
+                                      </div>
+                                  ))
+                                : ""}
                         </div>
 
                         <div class="bg-gray-50 rounded-xl p-2 w-full  max-lg:max-w-xl max-lg:mx-auto">
@@ -138,7 +130,7 @@ export default function OrderDetailsModal() {
                                     Sub Total
                                 </p>
                                 <h6 class="font-semibold  leading-8 text-gray-900">
-                                    $360.00
+                                    ₱{subtotal.toFixed(2)}
                                 </h6>
                             </div>
                             <div class="flex items-center justify-between w-full  border-b border-gray-200">
@@ -146,7 +138,7 @@ export default function OrderDetailsModal() {
                                     Delivery Charge
                                 </p>
                                 <h6 class="font-semibold  leading-8 text-gray-900">
-                                    $45.00
+                                    ₱50.00
                                 </h6>
                             </div>
                             <div class="flex items-center justify-between w-full">
@@ -154,7 +146,7 @@ export default function OrderDetailsModal() {
                                     Total
                                 </p>
                                 <h6 class="font-manrope font-medium text-md leading-9 text-indigo-500">
-                                    $405.00
+                                    ₱{(subtotal + 50).toFixed(2)}
                                 </h6>
                             </div>
                         </div>

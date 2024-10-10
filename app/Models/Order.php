@@ -12,12 +12,11 @@ class Order extends Model
     protected $table = 'orders';
 
     protected $fillable = [
-        'TOTAL_AMOUNT',
-        'ORDER_DATE',
         'PAYMENT_METHOD',
-        'PRICE',
         'STATUS',
         'USER_ID',
         'cart_id',
+        'address',
+        'contact_number'
     ];
 }
