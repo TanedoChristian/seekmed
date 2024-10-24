@@ -103,8 +103,6 @@ const ItemCard = ({
                 ...prevProduct,
                 quantity: 0,
             }));
-
-            
         } else {
             Swal.fire({
                 title: "Error!",
@@ -387,7 +385,7 @@ const ItemCard = ({
                     </section>
 
                     {/* Reviews */}
-                    <ReviewList />
+                    <ReviewList productId={product.id} />
                 </div>
             </DialogContent>
         </Dialog>

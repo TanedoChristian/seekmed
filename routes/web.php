@@ -9,6 +9,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PusherController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\RiderController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -17,6 +18,8 @@ use Inertia\Inertia;
 
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/products/{id}', [OrderController::class, 'index'])->middleware(['auth', 'verified']);
+
 Route::get('/admin/dashboard', [ProductController::class, 'index']);
 
 Route::get('/', function() {
@@ -39,15 +42,19 @@ Route::middleware('auth:rider')->group(function (){
 
 
 Route::prefix('api')->group(function() {
-
+    Route::post('/reviews', [RatingController::class, 'store']);
     Route::get('/customer/orders', [DashboardController::class, 'getOrders']);
-
     Route::get('/products', [ProductController::class, 'getAll']);
     Route::get('/rider', [DeliveryRiderController::class, 'index']);
     Route::post('/rider', [DeliveryRiderController::class, 'store']);
     Route::put('/rider/{id}', [DeliveryRiderController::class, 'update']);
     Route::delete('/rider/{id}', [DeliveryRiderController::class, 'destroy']);
     Route::post('/orders', [OrderController::class, 'store']);
+
+    Route::put('/orders/update', [OrderController::class, 'updateStatus']);
+
+
+
     Route::post('/carts', [CartItemController::class, 'store']);
     Route::post('/messages', [MessageController::class, 'store']);
     Route::put('/users/{id}', [UserController::class, 'update']);

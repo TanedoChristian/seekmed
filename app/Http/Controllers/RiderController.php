@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Delivery;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -26,13 +27,13 @@ class RiderController extends Controller
                 orders.address,
                 users.id as user_id,
                 carts.id as cart_id,
-                carts.status,
+                orders.status,
                 orders.id as order_id,
                 concat(users.first_name, " ", users.last_name) as name
             FROM users
             INNER JOIN carts ON carts.user_id = users.id
             INNER JOIN orders ON orders.cart_id = carts.id
-            WHERE orders.STATUS = "pending"
+            WHERE orders.STATUS = "Ready"
         ');
 
         return Inertia::render(
@@ -68,22 +69,21 @@ WHERE orders.id = ?
 
 
     public function acceptOrders(Request $request) {
+        Delivery::create([
+            'DELIVERY_STATUS' => 'pending',
+            'ORDER_ID' => $request->order_id,
+            'RIDER_ID' => Auth::guard('rider')->id(),
+        ]);
 
-        // Delivery::create([
-        //     'DELIVERY_STATUS' => 'pending',
-        //     'ORDER_ID' => $request->order_id,
-        //     'RIDER_ID' => Auth::guard('rider')->id(),
-        // ]);
-
-        // $cart_id = $request->cart_id;
-        // $cart = Cart::findOrFail($cart_id);
-
-
-
-        // $cart->update(['status' => 'deliver']);
-        // DB::update('UPDATE cart_items set status = "deliver" where cart_id = ?', [$cart_id]);
+        $cart_id = $request->cart_id;
+        $cart = Cart::findOrFail($cart_id);
+        $cart->update(['status' => 'to_deliver']);
+        DB::update('UPDATE cart_items set status = "to_deliver" where cart_id = ?', [$cart_id]);
 
 
+
+        $order = Order::findOrFail($request->order_id);
+        $order->update(['STATUS' => 'to_deliver']);
         $pusher = new Pusher(
             '0f60d240a7e37c6b2818',
             '7e581cbd1c107cd7cdb4',
@@ -95,12 +95,9 @@ WHERE orders.id = ?
         );
 
         $tempChannel = "accept-order-$request->user_id";
-
         $pusher->trigger($tempChannel, 'my-event', [
             'newOrder' => true,
         ]);
-
-
 
         return response()->json(['Success' =>Auth::guard('rider')->id()]);
     }

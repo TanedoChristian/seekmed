@@ -34,7 +34,12 @@ export default function HomePage() {
                             </ul>
 
                             <div class="flex lg:items-center justify-start flex-col lg:flex-row max-lg:gap-4 lg:flex-1 lg:justify-end">
-                                <button class="bg-main text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 py-3 px-6 text-sm lg:ml-5 hover:bg-indigo-700">
+                                <button
+                                    class="bg-main text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 py-3 px-6 text-sm lg:ml-5 hover:bg-indigo-700"
+                                    onClick={() => {
+                                        window.location.href = "/register";
+                                    }}
+                                >
                                     Sign up
                                 </button>
                             </div>
@@ -59,7 +64,12 @@ export default function HomePage() {
                         >
                             User
                         </button>
-                        <button class="bg-main text-white rounded-sm cursor-pointer font-semsibold text-center shadow-xs transition-all duration-500 py-2 px-8 text-sm lg:ml-5 hover:bg-indigo-700">
+                        <button
+                            class="bg-main text-white rounded-sm cursor-pointer font-semsibold text-center shadow-xs transition-all duration-500 py-2 px-8 text-sm lg:ml-5 hover:bg-indigo-700"
+                            onClick={() => {
+                                window.location.href = "/rider/login";
+                            }}
+                        >
                             Rider
                         </button>
                         <button

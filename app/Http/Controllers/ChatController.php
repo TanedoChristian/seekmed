@@ -13,6 +13,7 @@ class ChatController extends Controller
             $message = $request->input('message');
             $user = $request->input('user');
             $channelId = $request->input('channelId', 'default');
+            $status = $request->input('status');
 
             $pusher = new Pusher(
                 '0f60d240a7e37c6b2818',
@@ -29,7 +30,9 @@ class ChatController extends Controller
             $pusher->trigger($channelName, 'my-event', [
                 'message' => $message,
                 'user' => $user,
-                'channelId' => $channelId
+                'channelId' => $channelId,
+                'status' => isset($status) ? $status : 'pending'
+
             ]);
 
 

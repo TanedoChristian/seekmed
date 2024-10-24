@@ -58,7 +58,6 @@ export default function Order({ orders, setTableCategory }) {
     }, []);
 
     const handleAccept = (order) => {
-        console.log(order);
         axios.post("/api/accept-orders", order).then((data) => {
             Swal.fire({
                 icon: "success",

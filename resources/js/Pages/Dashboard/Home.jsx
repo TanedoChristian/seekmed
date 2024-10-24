@@ -4,15 +4,19 @@ import ProductList from "@/Components/ProductList";
 import EditProfile from "@/Components/Profile/Edit";
 import MessageBox from "@/Components/UserMessageBox";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { setDashboardCategory, setOrderAccepted } from "@/state/userSlice";
+import {
+    setDashboardCategory,
+    setOrderAccepted,
+    setReviews,
+} from "@/state/userSlice";
 import { Head } from "@inertiajs/react";
 import Pusher from "pusher-js";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function Dashboard({ auth, products, orders }) {
+export default function Dashboard({ auth, products, orders, reviews }) {
+    const dispatch = useDispatch();
     const [activeCarts, setActiveCarts] = useState([]);
-
     const [open, setOpen] = useState(false);
     const handleDialogOpen = () => {
         setOpen(true);
@@ -21,13 +25,14 @@ export default function Dashboard({ auth, products, orders }) {
         setOpen(false);
     };
 
+    dispatch(setReviews(reviews));
+
     const [dashboardPage, setDashboardPage] = useState(0);
 
     const dashboardCategory = useSelector(
         (state) => state.user.dashboardCategory
     );
 
-    const dispatch = useDispatch();
     const isAccepted = useSelector((state) => state.user.isOrderAccepted);
 
     if (orders.length > 0) {

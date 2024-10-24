@@ -10,8 +10,16 @@ use Illuminate\Support\Facades\Auth;
 class CartItemController extends Controller
 {
     public function store(Request $request) {
-        $cartId = Cart::where('user_id', Auth::id())->value('id');
-        $existingItem = CartItem::where('cart_id', $cartId)
+        $cart = Cart::where('user_id', Auth::id())->latest()->first();
+
+        if (!$cart || $cart->status === 'done') {
+            $cart = Cart::create([
+                'user_id' => Auth::id(),
+                'status' => 'pending'
+            ]);
+        }
+
+        $existingItem = CartItem::where('cart_id', $cart->id)
                                  ->where('product_id', $request->id)
                                  ->where('status', 'pending')
                                  ->first();
@@ -20,16 +28,15 @@ class CartItemController extends Controller
             $existingItem->quantity += $request->quantity;
             $existingItem->save();
 
-            return response()->json(['success' => 'Quantity updated', 'cart_id' => $cartId], 200);
+            return response()->json(['success' => 'Quantity updated', 'cart_id' => $cart->id], 200);
         } else {
             CartItem::create([
-                'cart_id' => $cartId,
+                'cart_id' => $cart->id,
                 'product_id' => $request->id,
                 'quantity' => $request->quantity,
                 'price' => $request->price
             ]);
-
-            return response()->json(['success' => 'Item added to cart', 'cart_id' => $cartId], 200);
+            return response()->json(['success' => 'Item added to cart', 'cart_id' => $cart->id], 200);
         }
     }
 }

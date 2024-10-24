@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DeliveryRider;
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,10 +15,12 @@ class ProductController extends Controller
 {
     $products = Product::all();
     $riders = DeliveryRider::all();
+    $orders = Order::all();
 
     return Inertia::render('Admin/Dashboard', [
         'products' => $products,
-        'riders' => $riders
+        'riders' => $riders,
+        'orders' => $orders
     ]);
 }
 
@@ -40,12 +43,9 @@ class ProductController extends Controller
         'image' => 'required|image', // Validate image upload
     ]);
 
-    // Handle file upload
     if ($request->hasFile('image')) {
-        // Store the image in the 'products' directory within the public disk
         $imagePath = $request->file('image')->store('products', 'public'); // Store image and get path
 
-        // Generate a URL for the stored image
         $imageUrl = asset('storage/' . $imagePath); // Create a URL to access the image
     } else {
         return response()->json(['error' => 'Image not provided'], 400);

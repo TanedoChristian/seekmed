@@ -49,9 +49,10 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
         $request->session()->regenerate();
-        $cart = Cart::where('user_id', Auth::id())->first();
 
-        if (!$cart) {
+
+        $latestCart = Cart::where('user_id', Auth::id())->latest()->first();
+        if (!$latestCart) {
             Cart::create([
                 'user_id' => Auth::id(),
                 'status' => 'pending'
@@ -71,8 +72,9 @@ class AuthenticatedSessionController extends Controller
 
     if (Auth::guard('rider')->attempt($credentials)) {
         $request->session()->regenerate();
-
         return redirect()->intended(route('rider.dashboard'));
+    } else {
+        return redirect()->intended(route('login-rider'));
     }
 
     return back()

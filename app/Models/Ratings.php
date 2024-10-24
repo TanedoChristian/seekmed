@@ -15,7 +15,7 @@ class Ratings extends Model
         'FEEDBACK',
         'RATING',
         'FEEDBACK_DATE',
-        'ORDER_ID',
+        'product_id',
         'USER_ID',
     ];
 }

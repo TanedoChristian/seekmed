@@ -18,7 +18,6 @@ export default function OrderChatDialog({ user }) {
 
     useEffect(() => {
         axios.get(`/api/customer/orders`).then(({ data }) => {
-            console.log(data);
             setOrders(data);
         });
     }, []);

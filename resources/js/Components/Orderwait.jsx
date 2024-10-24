@@ -1,4 +1,27 @@
+import { setOrderAccepted } from "@/state/userSlice";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
+
 export default function Orderwait() {
+    const dispatch = useDispatch();
+
+    const order = {
+        STATUS: "cancel",
+    };
+
+    const handleOrder = () => {
+        dispatch(setOrderAccepted(0));
+        axios.put("/api/orders/update", order).then(({ data }) => {
+            Swal.fire({
+                title: "Order cancelled",
+                icon: "warning",
+            });
+
+            window.location.href = "/dashboard";
+        });
+    };
+
     return (
         <section class="py-24 relative">
             <div class="w-full max-w-7xl px-4 md:px-5 lg:px-5 mx-auto">
@@ -223,6 +246,15 @@ export default function Orderwait() {
                                 fill="#3f3d56"
                             />
                         </svg>
+
+                        <div className="w-full flex justify-center mt-5">
+                            <button
+                                className="px-10 py-3 bg-main text-white rounded-md shadow-sm"
+                                onClick={handleOrder}
+                            >
+                                Cancel Order
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

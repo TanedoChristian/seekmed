@@ -17,6 +17,10 @@ const MessageBox = ({ user }) => {
 
         const channel = pusher.subscribe(`chat-channel-${user.id}`);
         channel.bind("my-event", (data) => {
+            if (data.status == "done") {
+                window.location.href = "/dashboard";
+            }
+
             setMessages((prev) => [...prev, data]);
         });
 
@@ -34,24 +38,27 @@ const MessageBox = ({ user }) => {
             channelId: user.id,
         };
         await axios.post("/message", messageData);
-
         setInputValue("");
     };
 
     return (
         <div className="w-full flex  bg-white">
-            <div className="w-[70%]">
+            <div className="w-[65%]">
                 <OrderChatDialog user={user} />
             </div>
-            <div className="flex flex-col flex-auto min-h-full p-6">
-                <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
+            <div className="flex flex-col flex-auto min-h-full p-6 ">
+                <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-[80vh] p-4">
                     <div className="flex flex-col h-full overflow-y-auto mb-4">
                         <div className="flex flex-col h-full ">
                             {messages.map((msg, index) =>
                                 msg.user == "A" ? (
                                     <div className="w-full flex  mt-2 justify-end gap-3 items-center p-2">
                                         <div className="relative py-2 px-4 shadow rounded-xl bg-white text-gray-900">
-                                            <div>{msg.message}</div>
+                                            <div
+                                                dangerouslySetInnerHTML={{
+                                                    __html: msg.message,
+                                                }}
+                                            />
                                         </div>
                                         <div key={index} className="">
                                             <div className="">
@@ -71,7 +78,11 @@ const MessageBox = ({ user }) => {
                                             </div>
                                         </div>
                                         <div className="relative py-2 px-4 shadow rounded-xl bg-white text-gray-900">
-                                            <div>{msg.message}</div>
+                                            <div
+                                                dangerouslySetInnerHTML={{
+                                                    __html: msg.message,
+                                                }}
+                                            />
                                         </div>
                                     </div>
                                 )

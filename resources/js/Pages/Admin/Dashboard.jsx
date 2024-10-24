@@ -11,7 +11,7 @@ import OrdersTable from "@/Components/Admin/OrdersTable";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shadcdn/ui/popover";
 import AdminTable from "@/Components/Admin/AdminTable";
 
-export default function Admin({ auth, products, name, riders }) {
+export default function Admin({ auth, products, name, riders, orders }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
     const [tableCategory, setTableCategory] = useState("inventory");
@@ -163,7 +163,7 @@ export default function Admin({ auth, products, name, riders }) {
                         </div>
                     ) : (
                         <div class="w-full flex justify-center py-10">
-                            <OrdersTable riders={riders} />
+                            <OrdersTable orders={orders} />
                         </div>
                     )}
                 </div>

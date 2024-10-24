@@ -13,23 +13,10 @@ import MyLocationIcon from "@mui/icons-material/MyLocation";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { Person2 } from "@mui/icons-material";
-
-import { Button } from "@/shadcdn/ui/button";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/shadcdn/ui/dialog";
-import { Label } from "@/shadcdn/ui/label";
 import OrderDialog from "@/Components/OrderDialog";
-import CheckoutDialog from "@/Components/CheckoutDialog";
 import { useDispatch } from "react-redux";
 import { setDashboardCategory } from "@/state/userSlice";
+import CheckoutDialog from "@/Components/CheckoutDialog";
 
 export default function Authenticated({
     user,

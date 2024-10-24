@@ -18,7 +18,6 @@ export default function OrderDetailsModal({ order }) {
                     `/api/customer/carts/${order.order_id}`
                 );
                 setProducts(data);
-                console.log(data);
             } catch (error) {
                 console.error("Error fetching products:", error);
             }

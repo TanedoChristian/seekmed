@@ -9,18 +9,12 @@ export default function EditProfile({ user }) {
     const [suggestions, setSuggestions] = useState([]);
 
     const onSubmit = async (data) => {
-        console.log(data);
-        axios
-            .put(`/api/users/${user.id}`, data)
-            .then(({ data }) => {
-                Swal.fire({
-                    title: "Success",
-                    icon: "success",
-                });
-            })
-            .catch((err) => {
-                console.log(err);
+        axios.put(`/api/users/${user.id}`, data).then(({ data }) => {
+            Swal.fire({
+                title: "Success",
+                icon: "success",
             });
+        });
     };
 
     const handleInputChange = async (e) => {
@@ -38,8 +32,6 @@ export default function EditProfile({ user }) {
                         },
                     }
                 );
-
-                console.log(response.data);
 
                 setSuggestions(response.data);
             } catch (error) {

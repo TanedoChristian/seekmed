@@ -3,12 +3,22 @@ import Pusher from "pusher-js";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import MyMap from "./Location/MapRealtime";
+import Swal from "sweetalert2";
 
-const MessageBox = () => {
+const MessageBox = ({ setTableCategory }) => {
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState("");
 
     const orders = useSelector((state) => state.order);
+
+    useEffect(() => {
+        const messageData = {
+            message: `<h1 style="font-weight: bold">This is Automated message </h1> <br/> Order ID: ${orders.order_id} <br /> Customer Name: ${orders.name} <br /> Address: ${orders.address}`,
+            user: "B",
+            channelId: orders.user_id,
+        };
+        axios.post("/message", messageData);
+    }, []);
 
     useEffect(() => {
         const pusher = new Pusher("0f60d240a7e37c6b2818", {
@@ -38,20 +48,53 @@ const MessageBox = () => {
         setInputValue("");
     };
 
+    const handleCart = async () => {
+        const messageData = {
+            message: inputValue,
+            user: "B",
+            status: "done",
+            channelId: orders.user_id,
+        };
+        await axios.post("/message", messageData);
+    };
+
+    const updateOrder = async (id) => {
+        const payload = {
+            id: id,
+            STATUS: "done",
+            cart_id: orders.cart_id,
+        };
+
+        const response = await axios.put("/api/orders/update", payload);
+
+        if (response.status == 200) {
+            Swal.fire({
+                title: `Status updated to ${payload.STATUS}`,
+                icon: "success",
+            });
+            handleCart();
+            window.location.href = "/rider/dashboard";
+        }
+    };
+
     return (
         <div className="flex justify-between h-[92vh]">
             <div className="w-[70%] overflow-hidden">
                 <MyMap lat={orders.latitude} lon={orders.longitude} />
             </div>
             <div className="flex flex-col flex-auto h-full p-6 w-[30%]">
-                <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
+                <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-[80vh] p-4">
                     <div className="flex flex-col h-full overflow-x-auto mb-4">
                         <div className="flex flex-col h-full">
                             {messages.map((msg, index) =>
                                 msg.user == "B" ? (
                                     <div className="w-full flex  mt-2 justify-end gap-3 items-center p-2">
                                         <div className="relative py-2 px-4 shadow rounded-xl bg-white text-gray-900">
-                                            <div>{msg.message}</div>
+                                            <div
+                                                dangerouslySetInnerHTML={{
+                                                    __html: msg.message,
+                                                }}
+                                            />
                                         </div>
                                         <div key={index} className="">
                                             <div className="">
@@ -71,7 +114,11 @@ const MessageBox = () => {
                                             </div>
                                         </div>
                                         <div className="relative py-2 px-4 shadow rounded-xl bg-white text-gray-900">
-                                            <div>{msg.message}</div>
+                                            <div
+                                                dangerouslySetInnerHTML={{
+                                                    __html: msg.message,
+                                                }}
+                                            />
                                         </div>
                                     </div>
                                 )
@@ -95,6 +142,14 @@ const MessageBox = () => {
                         </button>
                     </div>
                 </div>
+                <button
+                    className="py-2 w-full rounded-sm text-white bg-main mt-3 shadow-md hover:bg-blue-700"
+                    onClick={() => {
+                        updateOrder(orders.order_id);
+                    }}
+                >
+                    Done Deliver
+                </button>
             </div>
         </div>
     );

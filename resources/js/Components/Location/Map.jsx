@@ -5,7 +5,6 @@ import { useState } from "react";
 import OrderDetailsModal from "../Rider/OrderDetailsModal";
 
 export default function Map({ lat, lon, order }) {
-    console.log(order);
     const position = [lat, lon];
     const [isHovered, setIsHovered] = useState(false);
     return (

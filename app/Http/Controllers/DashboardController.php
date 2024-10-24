@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Ratings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,10 +16,15 @@ class DashboardController extends Controller
     {
         $id = Auth::id();
         $orders = DB::select('SELECT * from orders where USER_ID = ? and orders.STATUS = "PENDING"', [$id]);
+
+        $reviews = DB::select('SELECT CONCAT(users.first_name, " ", users.last_name) as customer, ratings_feedback.* FROM ratings_feedback INNER JOIN users ON users.id = ratings_feedback.USER_ID');
+
+
         $products = Product::all();
         return Inertia::render('Dashboard/Home', [
             'products' => $products,
             'orders' => $orders,
+            'reviews' => $reviews,
         ]);
     }
 
@@ -26,6 +32,7 @@ class DashboardController extends Controller
         $id = Auth::id();
         $orders = DB::select('SELECT
     cart_items.*,
+    products.id,
     products.PRODUCT_NAME,
     products.image,
     orders.id AS order_id,
@@ -38,7 +45,7 @@ class DashboardController extends Controller
 FROM cart_items
 JOIN products ON products.id = cart_items.product_id
 JOIN orders ON orders.cart_id = cart_items.cart_id
-WHERE orders.USER_ID = ? AND orders.STATUS = "PENDING"', [$id]);
+WHERE orders.USER_ID = ?', [$id]) ;
 
 
     return response()->json($orders);

@@ -22,7 +22,6 @@ class DeliveryRiderController extends Controller
     {
 
         $rider = DeliveryRider::findOrFail($id);
-
         $validatedData = $request->validate([
             'FNAME' => 'string',
             'LNAME' => 'string',
