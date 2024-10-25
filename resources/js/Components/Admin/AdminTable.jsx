@@ -100,7 +100,7 @@ export default function AdminTable({ initialProducts }) {
                                                                       size={10}
                                                                   />
                                                               ) : (
-                                                                  <div>
+                                                                  <div className="flex gap-2 items-center">
                                                                       <EditQuantity
                                                                           product={
                                                                               product
