@@ -19,7 +19,7 @@ export default function EditQuantity(product) {
     };
 
     return (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <Dialog>
             <DialogTrigger asChild>
                 <Pencil1Icon />
             </DialogTrigger>
