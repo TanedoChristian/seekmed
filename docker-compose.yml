@@ -49,18 +49,6 @@ services:
                 - "-p${DB_PASSWORD}"
             retries: 3
             timeout: 5s
-
-    rabbitmq:
-        image: "rabbitmq:3-management" # Use the RabbitMQ image with management plugin
-        ports:
-            - "5672:5672" # RabbitMQ default port
-            - "15672:15672" # Management UI port
-        environment:
-            RABBITMQ_DEFAULT_USER: "${RABBITMQ_USERNAME}" # Set RabbitMQ username in .env
-            RABBITMQ_DEFAULT_PASS: "${RABBITMQ_PASSWORD}" # Set RabbitMQ password in .env
-        networks:
-            - sail
-
 networks:
     sail:
         driver: bridge

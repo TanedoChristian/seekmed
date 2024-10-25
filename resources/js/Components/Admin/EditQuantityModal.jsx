@@ -7,7 +7,7 @@ import {
 import { Pencil1Icon } from "@radix-ui/react-icons";
 import { useState } from "react";
 
-export default function EditQuantity(product) {
+export default function EditQuantity({ product }) {
     const [quantity, setQuantity] = useState(product.STOCK_QUANTITY);
 
     const handleQuantity = (value) => {
