@@ -6,6 +6,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import useDelete from "@/hooks/useDelete";
+import EditQuantity from "./EditQuantityModal";
 
 export default function AdminTable({ initialProducts }) {
     const [products, setProducts] = useState(initialProducts);
@@ -99,7 +100,14 @@ export default function AdminTable({ initialProducts }) {
                                                                       size={10}
                                                                   />
                                                               ) : (
-                                                                  <TrashIcon />
+                                                                  <div>
+                                                                      <EditQuantity
+                                                                          product={
+                                                                              product
+                                                                          }
+                                                                      />
+                                                                      <TrashIcon />
+                                                                  </div>
                                                               )}
                                                           </button>
                                                       </div>
