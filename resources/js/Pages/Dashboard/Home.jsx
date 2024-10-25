@@ -18,6 +18,9 @@ export default function Dashboard({ auth, products, orders, reviews }) {
     const dispatch = useDispatch();
     const [activeCarts, setActiveCarts] = useState([]);
     const [open, setOpen] = useState(false);
+
+    const [localProducts, setProducts] = useState(products);
+
     const handleDialogOpen = () => {
         setOpen(true);
     };
@@ -64,6 +67,8 @@ export default function Dashboard({ auth, products, orders, reviews }) {
             activeCarts={activeCarts}
             setActiveCarts={setActiveCarts}
             setDashboardPage={setDashboardPage}
+            setProducts={setProducts}
+            products={products}
         >
             <Head title="Dashboard" />
 
@@ -72,7 +77,7 @@ export default function Dashboard({ auth, products, orders, reviews }) {
                     <Orderwait />
                 ) : (
                     <ProductList
-                        products={products}
+                        products={localProducts}
                         handleDialogOpen={handleDialogOpen}
                         activeCarts={activeCarts}
                         setActiveCarts={setActiveCarts}

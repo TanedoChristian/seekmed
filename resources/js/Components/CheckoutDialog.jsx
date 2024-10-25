@@ -93,7 +93,7 @@ export default function CheckoutDialog({ activeCarts, setActiveCarts }) {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <ShoppingCart fontSize="medium" className="text-white" />
+                <ShoppingCart fontSize="medium" className="text-white " />
             </DialogTrigger>
             <DialogContent className="sm:max-w-[70vw] h-[90vh]">
                 <section class="  after:contents-[''] after:absolute after:z-0 after:h-full xl:after:w-1/3 after:top-0 after:right-0 ">

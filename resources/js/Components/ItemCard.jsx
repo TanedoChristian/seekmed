@@ -115,23 +115,25 @@ const ItemCard = ({
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <div class="bg-white rounded-2xl p-5 cursor-pointer hover:-translate-y-2 transition-all relative">
-                    <span class="py-1 min-[400px]:py-2 px-2 min-[400px]:px-4 cursor-pointer rounded-lg bg-main from-indigo-600 to-purple-600 font-medium text-base leading-7 text-white absolute top-3 right-3 z-10 tex-sm">
+                <div class="bg-main  cursor-pointer hover:-translate-y-2 transition-all relative border lg:max-w-[12vw] max-w-[50vw] rounded-sm ">
+                    <span class="  px-2 min-[400px]:px-3 cursor-pointer rounded-sm bg-main  font-medium text-base leading-7 text-white absolute top-2 right-1 z-10 tex-sm">
                         {type == 0 ? "Retail" : "Wholesale"}
                     </span>
 
-                    <div class="w-5/6 h-[210px] overflow-hidden mx-auto aspect-w-16 aspect-h-8 md:mb-2 mb-4 bg-white">
+                    <div class="w-full  h-[170px] overflow-hidden mx-auto aspect-w-16 md:mb-2  bg-white">
                         <img
                             src={img}
                             alt="Product 1"
-                            class="h-full w-full object-contain"
+                            class="h-full w-full object-cover p-2"
                         />
                     </div>
 
-                    <div>
+                    <div className="p-3 mt-2">
                         <div className="flex items-center justify-between">
-                            <h3 class="text-lg  text-gray-800">{item}</h3>
-                            <h4 class="text-lg text-gray-800 font-semibold mt-4">
+                            <h3 class="font-medium  text-white  text-xs">
+                                {item}
+                            </h3>
+                            <h4 class=" text-white  font-medium text-xs">
                                 ₱ {price}
                             </h4>
                         </div>

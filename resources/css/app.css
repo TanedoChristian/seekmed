@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+.tooltip-content {
+    position: relative;
+    background-color: #333; /* Tooltip background color */
+    color: white; /* Tooltip text color */
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+.tooltip-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #333; /* Match this with the tooltip background color */
+    top: -6px; /* Positioning the arrow above the tooltip */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 @layer base {
     :root {
         --background: 0 0% 100%;

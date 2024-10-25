@@ -17,6 +17,19 @@ import OrderDialog from "@/Components/OrderDialog";
 import { useDispatch } from "react-redux";
 import { setDashboardCategory } from "@/state/userSlice";
 import CheckoutDialog from "@/Components/CheckoutDialog";
+import { TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
+import { Tooltip, TooltipContent } from "@/shadcdn/ui/tooltip";
+import ToolTip from "@/Components/ToolTip";
+import { BellIcon } from "@radix-ui/react-icons";
+import {
+    Flag,
+    FlagOutlined,
+    NotificationAddOutlined,
+    Notifications,
+    NotificationsOutlined,
+    SwitchAccount,
+    SwitchAccountOutlined,
+} from "@mui/icons-material";
 
 export default function Authenticated({
     user,
@@ -27,15 +40,78 @@ export default function Authenticated({
     activeCarts,
     setActiveCarts,
     setDashboardPage,
+    setProducts,
+    products,
 }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
     const dispatch = useDispatch();
 
+    const handleSearch = (e) => {
+        const filtered = products.filter((product) => {
+            return product.PRODUCT_NAME.toLowerCase().startsWith(
+                e.target.value.toLowerCase()
+            );
+        });
+        setProducts(filtered);
+    };
+
     return (
         <div className="min-h-screen bg-gray-100 w-full">
             <nav className="bg-[#499392] border-b border-gray-100">
+                <div className="w-full flex justify-end px-16">
+                    <div className="flex gap-3 mt-2 cursor-pointer ">
+                        <span className="flex gap-2 items-center">
+                            <FlagOutlined
+                                className="text-white text-sm"
+                                fontSize="inherit"
+                            />
+                            <p className="text-sm font-medium text-white hover:text-gray-700">
+                                Create Report
+                            </p>
+                        </span>
+                        <Separator orientation="vertical" />
+                        <span className="flex gap-2 items-center">
+                            <NotificationsOutlined
+                                className="text-white text-sm"
+                                fontSize="inherit"
+                            />
+                            <p className="text-sm font-medium text-white hover:text-gray-700">
+                                Notifications
+                            </p>
+                        </span>
+                        <Separator orientation="vertical" />
+                        <span className="flex gap-2 items-center">
+                            <SwitchAccountOutlined
+                                className="text-white text-sm"
+                                fontSize="inherit"
+                            />
+                            <p
+                                className="text-sm font-medium text-white hover:text-gray-700"
+                                onClick={() => {
+                                    dispatch(setDashboardCategory(1));
+                                }}
+                            >
+                                Edit Profile
+                            </p>
+                        </span>
+                        <Separator orientation="vertical" />
+                        <span className="flex gap-2">
+                            <ResponsiveNavLink
+                                className="text-sm font-medium text-white hover:text-gray-700"
+                                method="post"
+                                href={route("logout")}
+                                as="button"
+                            >
+                                Log Out
+                            </ResponsiveNavLink>
+                            {/* <p className="text-sm font-medium text-white hover:text-gray-700">
+                                Logout
+                            </p> */}
+                        </span>
+                    </div>
+                </div>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 ">
                     <div className="flex justify-between h-16 items-center">
                         <div className="flex">
@@ -52,45 +128,62 @@ export default function Authenticated({
                             </div>
                         </div>
 
-                        <div className="w-[40%] flex flex-col gap-3">
+                        <div className="w-[40%] flex gap-10 items-center">
                             <Input
                                 type="text"
-                                placeholder="Search..."
-                                className="bg-white text-black"
+                                placeholder="Search products"
+                                className="bg-white text-black outline-none border-none"
+                                onChange={handleSearch}
                             />
+                            <div className="flex items-center gap-3">
+                                <ToolTip
+                                    trigger={
+                                        <CheckoutDialog
+                                            open={open}
+                                            setIsOpen={setIsOpen}
+                                            activeCarts={activeCarts}
+                                            setActiveCarts={setActiveCarts}
+                                            title="Checkout"
+                                            imgSrc="https://atchealthcare.com.ph/wp-content/uploads/2020/03/Robust-Extreme-.png"
+                                            itemName="Centeral Catheter Kit"
+                                            itemCost="7,500.00"
+                                            quantity={5}
+                                            setDashboardPage={setDashboardPage}
+                                        />
+                                    }
+                                    content={<p>Shopping Cart</p>}
+                                />
+
+                                <ToolTip
+                                    trigger={
+                                        <ChatIcon
+                                            fontSize="medium"
+                                            className="text-white"
+                                            onClick={() => {
+                                                dispatch(
+                                                    setDashboardCategory(3)
+                                                );
+                                            }}
+                                        />
+                                    }
+                                    content={<p>Inbox</p>}
+                                />
+
+                                <ToolTip
+                                    trigger={<OrderDialog user={user} />}
+                                    content={<p>Order History</p>}
+                                />
+                            </div>
                         </div>
 
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
                             <div className="flex items-center gap-2 cursor-pointer">
-                                <CheckoutDialog
-                                    open={open}
-                                    setIsOpen={setIsOpen}
-                                    activeCarts={activeCarts}
-                                    setActiveCarts={setActiveCarts}
-                                    title="Checkout"
-                                    imgSrc="https://atchealthcare.com.ph/wp-content/uploads/2020/03/Robust-Extreme-.png"
-                                    itemName="Centeral Catheter Kit"
-                                    itemCost="7,500.00"
-                                    quantity={5}
-                                    setDashboardPage={setDashboardPage}
-                                />
-
-                                <ChatIcon
+                                {/* <MyLocationIcon
                                     fontSize="medium"
                                     className="text-white"
-                                    onClick={() => {
-                                        dispatch(setDashboardCategory(3));
-                                    }}
-                                />
+                                /> */}
 
-                                <OrderDialog user={user} />
-
-                                <MyLocationIcon
-                                    fontSize="medium"
-                                    className="text-white"
-                                />
-
-                                <div className="ml-10 flex gap-2">
+                                {/* <div className="ml-10 flex gap-2">
                                     <Popover>
                                         <PopoverTrigger asChild>
                                             <NotificationsIcon
@@ -135,7 +228,7 @@ export default function Authenticated({
                                             </ResponsiveNavLink>
                                         </PopoverContent>
                                     </Popover>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
 
