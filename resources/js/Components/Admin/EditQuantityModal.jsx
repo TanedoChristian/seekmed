@@ -24,7 +24,9 @@ export default function EditQuantity(product) {
                 <Pencil1Icon />
             </DialogTrigger>
             <DialogContent className="sm:max-w-[750px]">
-                <DialogHeader className="text-center"></DialogHeader>
+                <DialogHeader className="text-center">
+                    Edit Quantity
+                </DialogHeader>
                 <div class="flex sm:items-center sm:justify-center w-full">
                     <button
                         class="group py-4 px-6 border border-gray-400 rounded-l-full bg-white transition-all duration-300 hover:bg-gray-50 hover:shadow-sm hover:shadow-gray-300"
@@ -64,7 +66,7 @@ export default function EditQuantity(product) {
                         type="text"
                         class="font-semibold text-gray-900 cursor-pointer text-lg py-[13px] px-6 w-full sm:max-w-[118px] outline-0 border-y border-gray-400 bg-transparent placeholder:text-gray-900 text-center hover:bg-gray-50"
                         placeholder="1"
-                        value={quantity}
+                        value={product.STOCK_QUANTITY}
                     />
                     <button
                         class="group py-4 px-6 border border-gray-400 rounded-r-full bg-white transition-all duration-300 hover:bg-gray-50 hover:shadow-sm hover:shadow-gray-300"

@@ -14,6 +14,6 @@ echo "Containers are up and running!"
 
 
 
-./vendor/bin/sail artisan install
+./vendor/bin/sail composer install
 ./vendor/bin/sail npm install
 ./vendor/bin/sail artisan migrate:fresh

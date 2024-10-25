@@ -87,6 +87,13 @@ export default function AdminTable({ initialProducts }) {
                                                   </td>
                                                   <td class=" p-5 ">
                                                       <div class="flex items-center gap-1">
+                                                          <button>
+                                                              <EditQuantity
+                                                                  product={
+                                                                      product
+                                                                  }
+                                                              />
+                                                          </button>
                                                           <button
                                                               class="p-2 rounded-full  group transition-all duration-500  flex item-center"
                                                               onClick={() =>
@@ -101,11 +108,6 @@ export default function AdminTable({ initialProducts }) {
                                                                   />
                                                               ) : (
                                                                   <div className="flex gap-2 items-center">
-                                                                      <EditQuantity
-                                                                          product={
-                                                                              product
-                                                                          }
-                                                                      />
                                                                       <TrashIcon />
                                                                   </div>
                                                               )}
