@@ -7,6 +7,7 @@
 /vendor
 .env
 docker-compose.yml
+start-app.sh
 .env.backup
 .env.production
 .phpactor.json
