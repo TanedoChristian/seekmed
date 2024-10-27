@@ -14,7 +14,7 @@ import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import OrderDialog from "@/Components/OrderDialog";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setDashboardCategory } from "@/state/userSlice";
 import CheckoutDialog from "@/Components/CheckoutDialog";
 import { TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
@@ -22,6 +22,7 @@ import { Tooltip, TooltipContent } from "@/shadcdn/ui/tooltip";
 import ToolTip from "@/Components/ToolTip";
 import { BellIcon } from "@radix-ui/react-icons";
 import {
+    Circle,
     Flag,
     FlagOutlined,
     NotificationAddOutlined,
@@ -30,6 +31,13 @@ import {
     SwitchAccount,
     SwitchAccountOutlined,
 } from "@mui/icons-material";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/shadcdn/ui/dropdown-menu";
 
 export default function Authenticated({
     user,
@@ -47,6 +55,10 @@ export default function Authenticated({
         useState(false);
 
     const dispatch = useDispatch();
+
+    const notifications = useSelector(
+        (state) => state.notification.notifications
+    );
 
     const handleSearch = (e) => {
         const filtered = products.filter((product) => {
@@ -72,15 +84,38 @@ export default function Authenticated({
                             </p>
                         </span>
                         <Separator orientation="vertical" />
-                        <span className="flex gap-2 items-center">
-                            <NotificationsOutlined
-                                className="text-white text-sm"
-                                fontSize="inherit"
-                            />
-                            <p className="text-sm font-medium text-white hover:text-gray-700">
-                                Notifications
-                            </p>
-                        </span>
+
+                        <DropdownMenu>
+                            <DropdownMenuTrigger className="outline-none">
+                                <span className="flex gap-2 items-center outline-none relative ">
+                                    <NotificationsOutlined
+                                        className="text-white text-sm "
+                                        fontSize="inherit"
+                                    />
+
+                                    {notifications.length > 0 ? (
+                                        <div className="w-2 h-2 rounded-full bg-red-500 absolute top-1 left-2"></div>
+                                    ) : (
+                                        ""
+                                    )}
+
+                                    <p className="text-sm font-medium text-white hover:text-gray-700">
+                                        Notifications
+                                    </p>
+                                </span>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuSeparator />
+                                {notifications.length > 0 ? (
+                                    <DropdownMenuItem className="text-xs p-3">
+                                        {notifications}
+                                    </DropdownMenuItem>
+                                ) : (
+                                    "No Notification"
+                                )}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+
                         <Separator orientation="vertical" />
                         <span className="flex gap-2 items-center">
                             <SwitchAccountOutlined

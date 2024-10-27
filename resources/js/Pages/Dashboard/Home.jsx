@@ -4,6 +4,7 @@ import ProductList from "@/Components/ProductList";
 import EditProfile from "@/Components/Profile/Edit";
 import MessageBox from "@/Components/UserMessageBox";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { setNotification } from "@/state/notificationSlice";
 import {
     setDashboardCategory,
     setOrderAccepted,
@@ -51,6 +52,8 @@ export default function Dashboard({ auth, products, orders, reviews }) {
         const channel = pusher.subscribe(`accept-order-${auth.user.id}`);
         channel.bind("my-event", (data) => {
             dispatch(setDashboardCategory(3));
+
+            dispatch(setNotification("Order Accepted By Rider"));
         });
 
         return () => {

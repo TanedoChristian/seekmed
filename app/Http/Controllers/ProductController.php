@@ -72,4 +72,21 @@ class ProductController extends Controller
         $product->delete();
         return response()->json(['message' => 'Success'], 200);
     }
+
+    public function updateQuantity(Request $request, $id) {
+
+
+        if(isset($request->updateCart)) {
+            $product = Product::findOrFail($id);
+            $newQuantity = $product["STOCK_QUANTITY"] - $request->quantity;
+            $product->update(['STOCK_QUANTITY' => $newQuantity]);
+            $product->save();
+            return response()->json(["Message" => 'Product updated']);
+        }
+
+        $product = Product::findOrFail($id);
+        $product->update(['STOCK_QUANTITY' => $request->quantity]);
+        $product->save();
+        return response()->json(["Message" => 'Product updated']);
+    }
 }

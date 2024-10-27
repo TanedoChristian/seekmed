@@ -45,20 +45,42 @@ export default function CheckoutDialog({ activeCarts, setActiveCarts }) {
     );
 
     const postActiveCarts = (data) => {
-        activeCarts.map((active) => {
-            axios.post("/api/carts", active).then((data) => {});
-        });
-        axios.post("/api/orders", data).then(() => {
+        if (activeCarts.length <= 0) {
             Swal.fire({
-                title: "Added!",
-                text: `Successfully checkout your order.`,
-                icon: "success",
+                title: "Error",
+                text: `No Items in the Cart.`,
+                icon: "error",
+                timer: 1000,
+                showConfirmButton: false,
+            });
+        } else {
+            activeCarts.map((active) => {
+                const updateQuantity = {
+                    updateCart: true,
+                    quantity: active.quantity,
+                };
+                axios
+                    .put(`/api/products/${active.id}`, updateQuantity)
+                    .then((data) => {
+                        console.log(data);
+                    });
             });
 
-            dispatch(setOrderAccepted(1));
-            setIsOpen(false);
-            setActiveCarts([]);
-        });
+            activeCarts.map((active) => {
+                axios.post("/api/carts", active).then((data) => {});
+            });
+            axios.post("/api/orders", data).then(() => {
+                Swal.fire({
+                    title: "Added!",
+                    text: `Successfully checkout your order.`,
+                    icon: "success",
+                });
+
+                dispatch(setOrderAccepted(1));
+                setIsOpen(false);
+                setActiveCarts([]);
+            });
+        }
     };
 
     const handleInputChange = async (e) => {

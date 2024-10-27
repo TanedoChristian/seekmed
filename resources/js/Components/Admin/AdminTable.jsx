@@ -12,6 +12,16 @@ export default function AdminTable({ initialProducts }) {
     const [products, setProducts] = useState(initialProducts);
     const [loading, setLoading] = useState(false);
 
+    const handleUpdateQuantity = (productId, newQuantity) => {
+        const order = {
+            quantity: newQuantity,
+        };
+
+        axios.put(`/api/products/${productId}`, order).then((data) => {
+            location.reload();
+        });
+    };
+
     const handleDelete = (id) => {
         setLoading(true);
         axios
@@ -91,6 +101,9 @@ export default function AdminTable({ initialProducts }) {
                                                               <EditQuantity
                                                                   product={
                                                                       product
+                                                                  }
+                                                                  onUpdate={
+                                                                      handleUpdateQuantity
                                                                   }
                                                               />
                                                           </button>

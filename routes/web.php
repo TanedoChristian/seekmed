@@ -53,6 +53,8 @@ Route::prefix('api')->group(function() {
 
     Route::put('/orders/update', [OrderController::class, 'updateStatus']);
 
+    Route::put('/products/{id}', [ProductController::class, 'updateQuantity']);
+
 
 
     Route::post('/carts', [CartItemController::class, 'store']);
