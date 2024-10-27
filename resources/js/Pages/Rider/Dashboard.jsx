@@ -220,7 +220,7 @@ export default function Dashboard({ orders }) {
                                                         </svg>
                                                     </div>
                                                     <h2 class="text-gray-500 text-sm font-medium leading-snug">
-                                                        Logouts
+                                                        Logout
                                                     </h2>
                                                 </div>
                                             </div>

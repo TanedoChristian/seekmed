@@ -169,7 +169,7 @@ export default function AddRiderModal() {
                                             <input
                                                 type="password"
                                                 class="w-full focus:outline-none text-gray-900 placeholder-gray-400 text-lg font-normal leading-relaxed px-5 py-3 rounded-lg shadow-[0px_1px_2px_0px_rgba(16,_24,_40,_0.05)] border border-gray-200 justify-start items-center gap-2 inline-flex"
-                                                {...register("PASSWORD", {
+                                                {...register("password", {
                                                     required:
                                                         "password is required",
                                                 })}

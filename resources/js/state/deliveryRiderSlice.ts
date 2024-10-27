@@ -7,7 +7,7 @@ interface DeliveryRider {
     FNAME: string;
     LNAME: string;
     EMAIL: string;
-    PASSWORD: string;
+    password: string;
     CONTACTNO: string;
 }
 

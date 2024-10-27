@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DeliveryRider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class DeliveryRiderController extends Controller
 {
@@ -14,7 +15,16 @@ class DeliveryRiderController extends Controller
     }
 
     public function store(Request $request){
-        $rider = DeliveryRider::create($request->all());
+
+
+        $rider = DeliveryRider::create([
+            'FNAME' => $request->FNAME,
+            'LNAME' => $request->LNAME,
+            'EMAIL' => $request->EMAIL,
+            'password' => Hash::make($request->password),
+            'CONTACTNO' => $request->CONTACTNO,
+        ]);
+
         return response()->json($rider);
     }
 
@@ -27,6 +37,7 @@ class DeliveryRiderController extends Controller
             'LNAME' => 'string',
             'EMAIL' => 'string',
             'CONTACTNO' => 'string',
+
         ]);
 
         $rider->update($validatedData);

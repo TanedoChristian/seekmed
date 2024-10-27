@@ -24,7 +24,17 @@ export default function Login({ status, canResetPassword }) {
 
     return (
         <div className="w-full h-[100vh] flex">
-            <div className="w-[25%] h-full p-10 flex justify-center flex-col gap-16">
+            <div className="w-[25%] h-full p-10 flex justify-center flex-col gap-16 relative">
+                <div className="absolute top-5 left-5">
+                    <button
+                        className="bg-main text-white px-7 py-2 rounded-md"
+                        onClick={() => {
+                            window.location.href = "/";
+                        }}
+                    >
+                        Return
+                    </button>
+                </div>
                 <h1 className="text-5xl font-bold text-center">Login</h1>
                 <form onSubmit={submit}>
                     <div className="grid w-full max-w-sm items-center gap-1.5">
