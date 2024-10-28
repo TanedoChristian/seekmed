@@ -80,7 +80,7 @@ class AuthenticatedSessionController extends Controller
         ->withErrors([
             'EMAIL' => 'The provided credentials do not match our records.',
         ]);
-}
+    }
 
 
 
