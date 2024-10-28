@@ -66,21 +66,19 @@ class AuthenticatedSessionController extends Controller
     public function storeRider(Request $request): RedirectResponse
 {
     $credentials = $request->validate([
-        'EMAIL' => ['required'],  // Changed from 'email' to 'EMAIL'
+        'EMAIL' => ['required'],
         'password' => ['required'],
     ]);
 
     if (Auth::guard('rider')->attempt($credentials)) {
         $request->session()->regenerate();
         return redirect()->intended(route('rider.dashboard'));
-    } else {
-        return redirect()->intended(route('login-rider'));
     }
 
     return back()
-        ->withInput($request->only('EMAIL'))  // Changed from 'email' to 'EMAIL'
+        ->withInput($request->only('EMAIL'))
         ->withErrors([
-            'EMAIL' => 'The provided credentials do not match our records.',  // Changed error key
+            'EMAIL' => 'The provided credentials do not match our records.',
         ]);
 }
 

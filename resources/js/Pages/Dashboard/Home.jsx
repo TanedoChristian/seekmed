@@ -52,7 +52,6 @@ export default function Dashboard({ auth, products, orders, reviews }) {
         const channel = pusher.subscribe(`accept-order-${auth.user.id}`);
         channel.bind("my-event", (data) => {
             dispatch(setDashboardCategory(3));
-
             dispatch(setNotification("Order Accepted By Rider"));
         });
 

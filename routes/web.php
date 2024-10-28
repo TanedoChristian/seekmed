@@ -24,7 +24,7 @@ Route::get('/admin/dashboard', [ProductController::class, 'index']);
 
 Route::get('/', function() {
     return Inertia::render('HomePage');
-});
+})->name('home');
 
 
 Route::post('/products', [ProductController::class, 'store']);
