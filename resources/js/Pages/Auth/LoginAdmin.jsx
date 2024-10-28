@@ -7,6 +7,7 @@ import TextInput from "@/Components/TextInput";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { Label } from "@/shadcdn/ui/label";
 import { Input } from "@/shadcdn/ui/input";
+import { WindowRounded } from "@mui/icons-material";
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -17,9 +18,11 @@ export default function Login({ status, canResetPassword }) {
 
     const submit = (e) => {
         e.preventDefault();
-        post(route("login/admin"), {
-            onFinish: () => reset("password"),
-        });
+        // post(route("login/admin"), {
+        //     onFinish: () => reset("password"),
+        // });
+
+        window.location.href = "/admin/dashboard";
     };
 
     return (
@@ -79,12 +82,12 @@ export default function Login({ status, canResetPassword }) {
                             </Link>
                         )}
 
-                        <PrimaryButton
-                            className="ms-4 bg-main text-white"
-                            disabled={processing}
+                        <button
+                            type="submit"
+                            className="ms-4 bg-main text-white px-6 py-2 rounded-md"
                         >
                             Log in
-                        </PrimaryButton>
+                        </button>
                     </div>
                 </form>
             </div>
