@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 const MessageBox = ({ setTableCategory }) => {
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState("");
+    const [isChatActive, setIsChatActive] = useState(true); // State to track if chat is active
 
     const orders = useSelector((state) => state.order);
 
@@ -18,7 +19,7 @@ const MessageBox = ({ setTableCategory }) => {
             channelId: orders.user_id,
         };
         axios.post("/message", messageData);
-    }, []);
+    }, [orders]); // Add orders as a dependency
 
     useEffect(() => {
         const pusher = new Pusher("0f60d240a7e37c6b2818", {
@@ -28,14 +29,35 @@ const MessageBox = ({ setTableCategory }) => {
 
         const channel = pusher.subscribe(`chat-channel-${orders.user_id}`);
         channel.bind("my-event", (data) => {
-            setMessages((prev) => [...prev, data]);
+            if (isChatActive) {
+                // Only update messages if chat is active
+                setMessages((prev) => [...prev, data]);
+            }
         });
 
         return () => {
+            // Do not disconnect here; handle it in handleEndChat
             pusher.unsubscribe(`chat-channel-${orders.user_id}`);
-            pusher.disconnect();
+        };
+    }, [orders.user_id, isChatActive]);
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if ((event.ctrlKey || event.metaKey) && event.key === "r") {
+                event.preventDefault(); // Prevent refresh
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
         };
     }, []);
+
+    const handleEndChat = () => {
+        setIsChatActive(false);
+    };
 
     const handleSendMessage = async () => {
         if (inputValue.trim() === "") return;
@@ -59,10 +81,11 @@ const MessageBox = ({ setTableCategory }) => {
     };
 
     const updateOrder = async (id) => {
+        setIsChatActive(false);
         const payload = {
-            id: id,
+            id: 16,
             STATUS: "done",
-            cart_id: orders.cart_id,
+            cart_id: 1,
         };
 
         const response = await axios.put("/api/orders/update", payload);

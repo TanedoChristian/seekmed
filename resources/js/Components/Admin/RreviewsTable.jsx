@@ -30,8 +30,10 @@ export default function ReviewsTable({ reviews }) {
                         prev.filter((review) => review.id != id)
                     );
                 });
+                window.location.reload();
             }
         });
+        window.location.reload();
     };
 
     const handleSearch = (e) => {

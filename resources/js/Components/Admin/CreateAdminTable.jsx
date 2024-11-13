@@ -48,6 +48,7 @@ export default function CreateAdminTable({ initialAdmins }) {
                 });
             }
         });
+        window.location.reload();
     };
 
     const handleSearch = (e) => {

@@ -39,6 +39,7 @@ export default function AddRiderModal() {
             setIsOpen(false);
             reset();
         });
+        window.location.reload();
     };
 
     return (

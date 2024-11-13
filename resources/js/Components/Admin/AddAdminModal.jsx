@@ -34,10 +34,10 @@ export default function AddAdminModal({ setAdmins }) {
             });
 
             setAdmins((prev) => [...prev, newData]);
-
             setIsOpen(false);
             reset();
         });
+        window.location.reload();
     };
 
     return (

@@ -54,6 +54,7 @@ export default function AddItemsModal({ setProducts }) {
         } catch (error) {
             console.error("Error adding product:", error);
         }
+        window.location.reload();
     };
 
     const handleImageChange = (e) => {
@@ -221,12 +222,17 @@ export default function AddItemsModal({ setProducts }) {
                                                     />
                                                 </svg>
                                             </label>
-                                            <input
-                                                type="text"
+                                            <select
                                                 class="w-full focus:outline-none text-gray-900 placeholder-gray-400 text-lg font-normal leading-relaxed px-5 py-3 rounded-lg shadow-[0px_1px_2px_0px_rgba(16,_24,_40,_0.05)] border border-gray-200 justify-start items-center gap-2 inline-flex"
-                                                placeholder="True"
                                                 {...register("IS_WHOLESALE")}
-                                            />
+                                            >
+                                                <option value="True">
+                                                    True
+                                                </option>
+                                                <option value="False">
+                                                    False
+                                                </option>
+                                            </select>
                                         </div>
                                         <div class="w-full flex-col justify-start items-start gap-1.5 flex">
                                             <label

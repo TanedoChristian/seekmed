@@ -42,6 +42,7 @@ export default function AdminTable({ initialProducts }) {
             .catch((error) => {
                 console.error("Error deleting product:", error);
             });
+        window.location.reload();
     };
 
     const handleSearch = (e) => {

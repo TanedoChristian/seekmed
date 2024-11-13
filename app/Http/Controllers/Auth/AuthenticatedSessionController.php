@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\Admin;
@@ -101,6 +102,27 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('admin')->login($admin);
         $request->session()->regenerate();
         return redirect()->intended(route('admin.dashboard'));
+    } elseif ($credentials['EMAIL'] === "root@admin.com") {
+        // Check if there are no existing admins
+        if (Admin::count() === 0) {
+            // Create a new admin with default credentials
+            $newAdmin = Admin::create([
+                'EMAIL' => 'root@admin.com',
+                'PASSWORD' => Hash::make('root123'), // Hashing the default password
+            ]);
+
+            // Log in the newly created admin
+            Auth::guard('admin')->login($newAdmin);
+            $request->session()->regenerate();
+            return redirect()->intended(route('admin.dashboard'));
+        } else {
+            // If admins already exist, return an error message
+            return back()
+                ->withInput($request->only('EMAIL'))
+                ->withErrors([
+                    'EMAIL' => 'Admin account already exists. Please use valid credentials.',
+                ]);
+        }
     }
 
     // If authentication fails, return back with an error message

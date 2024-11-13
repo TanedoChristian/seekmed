@@ -9,7 +9,7 @@ import { setOrder } from "@/state/orderSlice";
 import OrdercCompleted from "./CompletedOrders";
 import { setRiderDashboard } from "@/state/deliveryRiderSlice";
 
-export default function Order({ orders, setTableCategory }) {
+export default function Order({ orders, setTableCategory, setNotifications }) {
     const [tempOrders, setOrders] = useState(orders);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -64,6 +64,10 @@ export default function Order({ orders, setTableCategory }) {
     }, []);
 
     const handleAccept = (order) => {
+        setNotifications((prevNotifications) => [
+            ...prevNotifications,
+            "Order is Accepted",
+        ]);
         axios.post("/api/accept-orders", order).then((data) => {
             Swal.fire({
                 icon: "success",

@@ -55,6 +55,7 @@ export default function DeliveryRiderTable({ initialRiders }) {
                 });
             }
         });
+        window.location.reload();
     };
 
     const handleSearch = (e) => {

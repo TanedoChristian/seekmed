@@ -15,14 +15,41 @@ import axios from "axios";
 import { useState } from "react";
 import { CircularProgress } from "@mui/material";
 import ReviewDialog from "./ReviewDialog";
+import Swal from "sweetalert2";
 
-export default function OrderHistory({ orders }) {
+export default function OrderHistory({ orders, setIsOpen }) {
     const uniqueOrders = Array.from(
         new Set(orders.map((order) => order.order_id))
     ).map((id) => orders.find((order) => order.order_id === id));
 
     const doneOrders = orders.filter((order) => order.STATUS == "done");
     const rejectedOrders = orders.filter((order) => order.STATUS == "rejected");
+
+    const handleReOrder = (order) => {
+        const orderPayload = {
+            PAYMENT_METHOD: order.PAYMENT_METHOD,
+            address: order.address,
+            contact_number: order.contact_number,
+        };
+        setIsOpen(false);
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, Re Order it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.post("/api/orders", orderPayload).then(() => {
+                    window.location.href = "/dashboard";
+                });
+            }
+        });
+    };
+
     return (
         <div className="p-6">
             <h1 className="text-3xl font-bold tracking-wide"> Order History</h1>
@@ -112,7 +139,12 @@ export default function OrderHistory({ orders }) {
                                                     Add Review
                                                 </button>
 
-                                                <button className="ml-5 px-10 py-2 bg-main rounded-sm text-white">
+                                                <button
+                                                    className="ml-5 px-10 py-2 bg-main rounded-sm text-white"
+                                                    onClick={() => {
+                                                        handleReOrder(order);
+                                                    }}
+                                                >
                                                     Reorder
                                                 </button>
                                             </td>

@@ -2,18 +2,27 @@ import axios from "axios";
 import AddItemsModal from "./AddItemModal";
 import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 import Swal from "sweetalert2";
+import { useState } from "react";
 
 export default function OrdersTable({ orders }) {
-    const updateOrderStatus = async (order, status) => {
-        order.STATUS = status;
-        const response = await axios.put("/api/orders/update", order);
+    const [localOrders, setLocalOrders] = useState(orders);
 
-        if (response.status == 200) {
+    const updateOrderStatus = async (order, status) => {
+        const updatedOrder = { ...order, STATUS: status };
+        const response = await axios.put("/api/orders/update", updatedOrder);
+
+        if (response.status === 200) {
             Swal.fire({
                 title: `Status updated to ${status}`,
                 icon: "success",
             });
+
+            // Update the localOrders state
+            setLocalOrders((prevOrders) =>
+                prevOrders.map((o) => (o.id === order.id ? updatedOrder : o))
+            );
         }
+        window.location.reload();
     };
 
     return (
@@ -61,8 +70,8 @@ export default function OrdersTable({ orders }) {
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-300 ">
-                                    {orders
-                                        ? orders.map((order) => (
+                                    {localOrders
+                                        ? localOrders.map((order) => (
                                               <tr class="bg-white transition-all duration-500 hover:bg-gray-50">
                                                   <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 ">
                                                       {order.USER_ID}

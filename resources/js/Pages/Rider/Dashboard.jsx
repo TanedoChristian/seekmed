@@ -2,10 +2,16 @@ import MapRealtime from "@/Components/Location/MapRealtime";
 import MessageBox from "@/Components/MessageBox";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import Order from "@/Components/Rider/Order";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/shadcdn/ui/dropdown-menu";
 import { Input } from "@/shadcdn/ui/input";
 import { Link, useForm } from "@inertiajs/react";
-import { Message } from "@mui/icons-material";
-import { useState } from "react";
+import { Message, NotificationsOutlined } from "@mui/icons-material";
+import { useEffect, useState } from "react";
 
 export default function Dashboard({ orders }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
@@ -15,6 +21,17 @@ export default function Dashboard({ orders }) {
     const submit = (e) => {
         post(route("logout.rider"));
     };
+
+    const [notifications, setNotifications] = useState([]);
+
+    useEffect(() => {
+        orders.length > 0
+            ? setNotifications((prevNotifications) => [
+                  ...prevNotifications,
+                  `New Order with Order Id`,
+              ])
+            : "";
+    }, []);
 
     return (
         <div>
@@ -117,7 +134,7 @@ export default function Dashboard({ orders }) {
                                     </a>
                                 </li>
 
-                                <li
+                                {/* <li
                                     onClick={() => setTableCategory("chat")}
                                     className="cursor-pointer"
                                 >
@@ -170,7 +187,37 @@ export default function Dashboard({ orders }) {
                                             </div>
                                         </div>
                                     </a>
-                                </li>
+                                </li> */}
+
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger className="outline-none bg-white  p-3 rounded-lg ">
+                                        <span className="flex gap-2 items-center outline-none relative ">
+                                            <NotificationsOutlined
+                                                className="text-gray-600 text-sm "
+                                                fontSize="inherit"
+                                            />
+
+                                            {notifications.length > 0 ? (
+                                                <div className="w-2 h-2 rounded-full bg-red-500 absolute top-1 left-2"></div>
+                                            ) : (
+                                                ""
+                                            )}
+
+                                            <p className="text-sm font-medium text-gray-600">
+                                                Notifications
+                                            </p>
+                                        </span>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        {notifications.length > 0 ? (
+                                            <DropdownMenuItem className="text-xs p-3">
+                                                {notifications}
+                                            </DropdownMenuItem>
+                                        ) : (
+                                            "No Notification"
+                                        )}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
 
                                 <li className="cursor-pointer">
                                     <form onSubmit={submit}>
@@ -269,7 +316,11 @@ export default function Dashboard({ orders }) {
             {category == "chat" ? (
                 <MessageBox setTableCategory={setTableCategory} />
             ) : (
-                <Order orders={orders} setTableCategory={setTableCategory} />
+                <Order
+                    orders={orders}
+                    setTableCategory={setTableCategory}
+                    setNotifications={setNotifications}
+                />
             )}
         </div>
     );
