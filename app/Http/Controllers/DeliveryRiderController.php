@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\DeliveryRider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class DeliveryRiderController extends Controller
@@ -49,5 +51,12 @@ class DeliveryRiderController extends Controller
         $rider = DeliveryRider::findOrFail($id);
         $rider->delete();
         return response()->json(['message' => 'Success'], 200);
+    }
+
+
+    public function GetOrderHistory() {
+        $riderId = Auth::guard('rider')->id();
+        $orderHistory = DB::select('SELECT deliveries.*, orders.* from deliveries inner join orders on orders.id = deliveries.ORDER_ID where RIDER_ID = ?;', [$riderId]);
+        return response()->json($orderHistory);
     }
 }

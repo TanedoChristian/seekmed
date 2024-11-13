@@ -1,6 +1,6 @@
 import AdminSideNav from "@/Components/Admin/AdminSideNav";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
-import { Link } from "@inertiajs/react";
+import { Link, useForm } from "@inertiajs/react";
 import { Input } from "@/shadcdn/ui/input";
 
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
@@ -10,8 +10,23 @@ import DeliveryRiderTable from "@/Components/Admin/DeliveryRiderTable";
 import OrdersTable from "@/Components/Admin/OrdersTable";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shadcdn/ui/popover";
 import AdminTable from "@/Components/Admin/AdminTable";
+import Reports from "@/Components/Admin/Reports";
+import CreateAdminTable from "@/Components/Admin/CreateAdminTable";
+import ReviewsTable from "@/Components/Admin/RreviewsTable";
 
-export default function Admin({ auth, products, name, riders, orders }) {
+export default function Admin({
+    auth,
+    products,
+    name,
+    riders,
+    orders,
+    admins,
+    reviews,
+}) {
+    const { post } = useForm({});
+    const submit = (e) => {
+        post(route("logout.admin"));
+    };
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
     const [tableCategory, setTableCategory] = useState("inventory");
@@ -31,13 +46,7 @@ export default function Admin({ auth, products, name, riders, orders }) {
                             </div>
                         </div>
 
-                        <div className="w-[40%] flex flex-col gap-3">
-                            <Input
-                                type="text"
-                                placeholder="Search..."
-                                className="bg-white text-black"
-                            />
-                        </div>
+                        <div className="w-[40%] flex flex-col gap-3"></div>
 
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
                             <div className="flex items-center gap-2 cursor-pointer">
@@ -50,58 +59,27 @@ export default function Admin({ auth, products, name, riders, orders }) {
                                             />
                                         </PopoverTrigger>
                                         <PopoverContent className="w-30">
-                                            <ResponsiveNavLink
-                                                method="post"
-                                                href={route("logout")}
-                                                as="button"
-                                            >
-                                                Log Out
-                                            </ResponsiveNavLink>
+                                            <li className="cursor-pointer">
+                                                <form onSubmit={submit}>
+                                                    <button
+                                                        onClick={() => submit()}
+                                                    >
+                                                        <div
+                                                            class={`flex-col flex p-3  rounded-lg bg-white`}
+                                                        >
+                                                            <div class="h-5 gap-3 flex">
+                                                                <h2 class="text-gray-500 text-sm font-medium leading-snug">
+                                                                    Logout
+                                                                </h2>
+                                                            </div>
+                                                        </div>
+                                                    </button>
+                                                </form>
+                                            </li>
                                         </PopoverContent>
                                     </Popover>
                                 </div>
                             </div>
-                        </div>
-
-                        <div className="-me-2 flex items-center sm:hidden">
-                            <button
-                                onClick={() =>
-                                    setShowingNavigationDropdown(
-                                        (previousState) => !previousState
-                                    )
-                                }
-                                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
-                            >
-                                <svg
-                                    className="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        className={
-                                            !showingNavigationDropdown
-                                                ? "inline-flex"
-                                                : "hidden"
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        className={
-                                            showingNavigationDropdown
-                                                ? "inline-flex"
-                                                : "hidden"
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -161,9 +139,21 @@ export default function Admin({ auth, products, name, riders, orders }) {
                         <div class="w-full flex justify-center py-10">
                             <DeliveryRiderTable initialRiders={riders} />
                         </div>
-                    ) : (
+                    ) : tableCategory == "orders" ? (
                         <div class="w-full flex justify-center py-10">
                             <OrdersTable orders={orders} />
+                        </div>
+                    ) : tableCategory == "accounts" ? (
+                        <div class="w-full flex justify-center py-10">
+                            <CreateAdminTable initialAdmins={admins} />
+                        </div>
+                    ) : tableCategory == "reviews" ? (
+                        <div class="w-full flex justify-center py-10">
+                            <ReviewsTable reviews={reviews} />
+                        </div>
+                    ) : (
+                        <div class="w-full flex  py-10">
+                            <Reports orders={orders} />
                         </div>
                     )}
                 </div>

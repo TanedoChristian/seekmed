@@ -31,13 +31,7 @@ export default function Dashboard({ orders }) {
                             </div>
                         </div>
 
-                        <div className="w-[40%] flex flex-col gap-3">
-                            <Input
-                                type="text"
-                                placeholder="Search..."
-                                className="bg-white text-black"
-                            />
-                        </div>
+                        <div className="w-[40%] flex flex-col gap-3"></div>
 
                         <div className="-me-2 flex items-center sm:hidden">
                             <button

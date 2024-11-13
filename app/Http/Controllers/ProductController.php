@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\DeliveryRider;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Ratings;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -16,11 +19,19 @@ class ProductController extends Controller
     $products = Product::all();
     $riders = DeliveryRider::all();
     $orders = Order::all();
+    $admins = Admin::all();
+    //$reviews = Ratings::all();
+
+
+    $reviews = DB::select('SELECT ratings_feedback.*, users.email  FROM ratings_feedback INNER JOIN users ON users.id = ratings_feedback.USER_ID');
+
 
     return Inertia::render('Admin/Dashboard', [
         'products' => $products,
         'riders' => $riders,
-        'orders' => $orders
+        'orders' => $orders,
+        'admins' => $admins,
+        'reviews' => $reviews
     ]);
 }
 

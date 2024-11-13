@@ -38,6 +38,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/shadcdn/ui/dropdown-menu";
+import CreateReportDialog from "@/Components/CreateReportDialog";
 
 export default function Authenticated({
     user,
@@ -74,17 +75,6 @@ export default function Authenticated({
             <nav className="bg-[#499392] border-b border-gray-100">
                 <div className="w-full flex justify-end px-16">
                     <div className="flex gap-3 mt-2 cursor-pointer ">
-                        <span className="flex gap-2 items-center">
-                            <FlagOutlined
-                                className="text-white text-sm"
-                                fontSize="inherit"
-                            />
-                            <p className="text-sm font-medium text-white hover:text-gray-700">
-                                Create Report
-                            </p>
-                        </span>
-                        <Separator orientation="vertical" />
-
                         <DropdownMenu>
                             <DropdownMenuTrigger className="outline-none">
                                 <span className="flex gap-2 items-center outline-none relative ">

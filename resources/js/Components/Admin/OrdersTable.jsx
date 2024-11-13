@@ -21,7 +21,6 @@ export default function OrdersTable({ orders }) {
             <div class="flex flex-col">
                 <div className="w-full flex justify-between  p-3 ">
                     <h1 className="text-3xl font-semibold">Orders</h1>
-                    <AddItemsModal />
                 </div>
                 <div class=" overflow-x-auto">
                     <div class="min-w-full inline-block align-middle">

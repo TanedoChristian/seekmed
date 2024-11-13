@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Admin;
 use App\Models\Cart;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -50,7 +52,6 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
 
-
         $latestCart = Cart::where('user_id', Auth::id())->latest()->first();
         if (!$latestCart) {
             Cart::create([
@@ -64,34 +65,51 @@ class AuthenticatedSessionController extends Controller
 
 
     public function storeRider(Request $request): RedirectResponse
+    {
+        $credentials = $request->validate([
+            'EMAIL' => ['required'],
+            'password' => ['required'],
+        ]);
+
+        if (Auth::guard('rider')->attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended(route('rider.dashboard'));
+        }
+
+        return back()
+            ->withInput($request->only('EMAIL'))
+            ->withErrors([
+                'EMAIL' => 'The provided credentials do not match our records.',
+            ]);
+        }
+
+
+
+        public function storeAdmin(Request $request)
 {
+    // Validate incoming request
     $credentials = $request->validate([
-        'EMAIL' => ['required'],
-        'password' => ['required'],
+        'EMAIL' => ['required', 'email'],
+        'PASSWORD' => ['required'],
     ]);
 
-    if (Auth::guard('rider')->attempt($credentials)) {
+    // Retrieve the admin record based on the email
+    $admin = Admin::where('EMAIL', $credentials['EMAIL'])->first();
+
+    // Check if admin exists and verify the password
+    if ($admin && Hash::check($credentials['PASSWORD'], $admin->PASSWORD)) {
+        Auth::guard('admin')->login($admin);
         $request->session()->regenerate();
-        return redirect()->intended(route('rider.dashboard'));
+        return redirect()->intended(route('admin.dashboard'));
     }
 
+    // If authentication fails, return back with an error message
     return back()
         ->withInput($request->only('EMAIL'))
         ->withErrors([
             'EMAIL' => 'The provided credentials do not match our records.',
         ]);
-    }
-
-
-
-    public function storeAdmin(LoginRequest $request): RedirectResponse
-    {
-        // $request->authenticate();
-
-        // $request->session()->regenerate();
-
-        return redirect()->intended(route('admin/dashboard', absolute: false));
-    }
+}
 
     /**
      * Destroy an authenticated session.
@@ -100,6 +118,7 @@ class AuthenticatedSessionController extends Controller
     {
         Auth::guard('web')->logout();
         Auth::guard('rider')->logout();
+        Auth::guard('admin')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/');
@@ -109,6 +128,17 @@ class AuthenticatedSessionController extends Controller
     {
         Auth::guard('web')->logout();
         Auth::guard('rider')->logout();
+        Auth::guard('admin')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
+    }
+
+    public function destroyAdmin(Request $request): RedirectResponse
+    {
+        Auth::guard('web')->logout();
+        Auth::guard('rider')->logout();
+        Auth::guard('admin')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/');

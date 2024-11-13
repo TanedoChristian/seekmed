@@ -1,5 +1,9 @@
 import AddItemsModal from "./AddItemModal";
-import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
+import {
+    MagnifyingGlassIcon,
+    Pencil1Icon,
+    TrashIcon,
+} from "@radix-ui/react-icons";
 import AddRiderModal from "./AddRiderModal";
 import { useState } from "react";
 import UpdateDeliveryRiderModal from "../UpdateDeliveryRiderModal";
@@ -9,20 +13,26 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     deleteDeliveryRider,
     fetchDeliveryRiders,
+    setRiders,
 } from "@/state/deliveryRiderSlice";
 import { useEffect } from "react";
+import { Input } from "@/shadcdn/ui/input";
 
 export default function DeliveryRiderTable({ initialRiders }) {
-    const [riders, setRiders] = useState(initialRiders);
     const [loading, setLoading] = useState(false);
 
     const dispatch = useDispatch();
 
     const tempRiders = useSelector((state) => state.deliveryRider.riders);
+    const [filteredRiders, setFilteredRiders] = useState(tempRiders);
 
     useEffect(() => {
         dispatch(fetchDeliveryRiders());
     }, [dispatch]);
+
+    useEffect(() => {
+        setFilteredRiders(tempRiders);
+    }, [tempRiders]);
 
     const handleDelete = (id) => {
         Swal.fire({
@@ -47,9 +57,28 @@ export default function DeliveryRiderTable({ initialRiders }) {
         });
     };
 
+    const handleSearch = (e) => {
+        const filtered = tempRiders.filter((rider) => {
+            const name = rider.FNAME.concat(rider.LNAME);
+            return name.toLowerCase().includes(e.target.value.toLowerCase());
+        });
+        setFilteredRiders(filtered);
+    };
+
     return (
         <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 w-[80%]">
             <div class="flex flex-col">
+                {" "}
+                <div className="flex gap-3 items-center ">
+                    <div className="relative">
+                        <Input
+                            className="pl-10 pr-4 shadow-sm font-bold outline-none"
+                            placeholder="Search..."
+                            onChange={handleSearch}
+                        />
+                        <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+                    </div>
+                </div>
                 <div className="w-full flex justify-between  p-3 ">
                     <h1 className="text-3xl font-semibold">Delivery Riders</h1>
                     <AddRiderModal />
@@ -87,8 +116,8 @@ export default function DeliveryRiderTable({ initialRiders }) {
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-300 ">
-                                    {tempRiders
-                                        ? tempRiders.map((rider) => (
+                                    {filteredRiders
+                                        ? filteredRiders.map((rider) => (
                                               <tr class="bg-white transition-all duration-500 hover:bg-gray-50">
                                                   <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 ">
                                                       {rider.FNAME ?? ""}

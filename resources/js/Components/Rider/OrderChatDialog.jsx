@@ -67,38 +67,6 @@ export default function OrderChatDialog({ user }) {
                                 </h6>
                             </div>
                         </div>
-                        <div className="h-[30vh] overflow-auto  border p-5">
-                            {orders.map((order) => (
-                                <div class="grid grid-cols-7 w-full pb-5 border-b border-gray-100">
-                                    <div class="col-span-7 min-[500px]:col-span-2 md:col-span-1">
-                                        <img
-                                            src={order.image}
-                                            alt="Skin Care Kit image"
-                                            class=" rounded-xl object-cover h-20 w-20"
-                                        />
-                                    </div>
-                                    <div class="col-span-7 min-[500px]:col-span-5 md:col-span-6 min-[500px]:pl-5 max-sm:mt-5 flex flex-col justify-center">
-                                        <div class="flex flex-col min-[500px]:flex-row min-[500px]:items-center justify-between">
-                                            <div class="">
-                                                <h5 class="font-manrope font-semibold  leading-9 text-black ">
-                                                    {order.PRODUCT_NAME}
-                                                </h5>
-                                                <p class="font-normal  leading-8 text-gray-500">
-                                                    Quantity :{" "}
-                                                    <span class="text-black font-semibold">
-                                                        {order.quantity}
-                                                    </span>
-                                                </p>
-                                            </div>
-
-                                            <h5 class="font-manrope font-semibold text-lg leading-10 text-black sm:text-right mt-3">
-                                                {order.price}
-                                            </h5>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
 
                         <div class="flex items-center justify-center sm:justify-end w-full py-5  ">
                             <div class=" w-full">

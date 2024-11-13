@@ -79,6 +79,7 @@ export default function Dashboard({ auth, products, orders, reviews }) {
                     <Orderwait />
                 ) : (
                     <ProductList
+                        user={auth.user}
                         products={localProducts}
                         handleDialogOpen={handleDialogOpen}
                         activeCarts={activeCarts}

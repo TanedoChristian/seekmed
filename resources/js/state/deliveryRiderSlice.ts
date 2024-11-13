@@ -11,7 +11,15 @@ interface DeliveryRider {
     CONTACTNO: string;
 }
 
-// Define async thunks for API calls
+interface OrderCompleted {
+    id: number;
+    DELIVERY_DATE: string;
+    DELIVERY_STATUS: string;
+    ORDER_ID: number;
+    RIDER_ID: number;
+    STATUS: string;
+}
+
 export const fetchDeliveryRiders = createAsyncThunk(
     "deliveryRider/fetchDeliveryRiders",
     async () => {
@@ -49,8 +57,10 @@ export const deleteDeliveryRider = createAsyncThunk(
 
 const initialState = {
     riders: [] as DeliveryRider[],
-    loading: false,
     rider: null as DeliveryRider | null,
+    orderCompleted: [] as OrderCompleted[],
+    dashboard: 0,
+    loading: false,
     error: null,
 };
 
@@ -60,6 +70,13 @@ const deliveryRiderSlice = createSlice({
     reducers: {
         setRiders(state, action: PayloadAction<DeliveryRider[]>) {
             state.riders = action.payload;
+        },
+        setOrderCompleted(state, action: PayloadAction<OrderCompleted[]>) {
+            state.orderCompleted = action.payload;
+        },
+
+        setRiderDashboard(state, action: PayloadAction<number>) {
+            state.dashboard = action.payload;
         },
     },
     extraReducers: (builder) => {
@@ -94,6 +111,7 @@ const deliveryRiderSlice = createSlice({
     },
 });
 
-export const { setRiders } = deliveryRiderSlice.actions;
+export const { setRiders, setOrderCompleted, setRiderDashboard } =
+    deliveryRiderSlice.actions;
 
 export default deliveryRiderSlice.reducer;

@@ -22,6 +22,19 @@
     transform: translateX(-50%);
 }
 
+select {
+    text-indent: 1px;
+    text-overflow: "";
+    width: 50px;
+    height: 50px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: transparent
+        url(https://pagedone.io/asset/uploads/1716542745.png) no-repeat 97%
+        center;
+}
+
 @layer base {
     :root {
         --background: 0 0% 100%;

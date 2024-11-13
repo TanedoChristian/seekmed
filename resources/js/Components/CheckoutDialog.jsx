@@ -94,6 +94,7 @@ export default function CheckoutDialog({ activeCarts, setActiveCarts }) {
                             q: value,
                             format: "json",
                             addressdetails: 1,
+                            countrycodes: "PH",
                             limit: 5,
                         },
                     }
@@ -106,6 +107,7 @@ export default function CheckoutDialog({ activeCarts, setActiveCarts }) {
             setSuggestions([]);
         }
     };
+
 
     const handleSuggestionClick = (location) => {
         setValue("address", location.display_name);

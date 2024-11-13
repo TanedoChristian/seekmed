@@ -1,7 +1,10 @@
 import { Person } from "@mui/icons-material";
 import { Rating } from "@mui/material";
+import { TrashIcon } from "@radix-ui/react-icons";
+import axios from "axios";
+import Swal from "sweetalert2";
 
-export default function Review({ review }) {
+export default function Review({ review, user, onDelete }) {
     return (
         <div class="w-full max-w-7xl px-4 md:px-5 lg:6 mx-auto">
             <div class="w-full">
@@ -16,12 +19,24 @@ export default function Review({ review }) {
                                 <h6 class="font-semibold text-lg leading-8 text-indigo-600">
                                     {review.customer}
                                 </h6>
+
+                                <p class="font-normal text-sm leading-8 text-gray-400">
+                                    {review.updated_at}
+                                </p>
+
                                 <Rating value={review.RATING} />
                             </div>
                         </div>
-                        <p class="font-normal text-sm leading-8 text-gray-400">
-                            {review.updated_at}
-                        </p>
+                        {review.USER_ID == user.id ? (
+                            <button
+                                className="px-6 py-1 bg-red-500 text-white rounded-sm"
+                                onClick={() => onDelete(review.id)}
+                            >
+                                Delete
+                            </button>
+                        ) : (
+                            ""
+                        )}
                     </div>
                     <p class="font-normal text-lg leading-8 text-gray-400 max-xl:text-justify">
                         {review.FEEDBACK}

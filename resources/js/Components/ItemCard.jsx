@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 import ReviewList from "./Reivews/ReviewList";
 
 const ItemCard = ({
+    user,
     id,
     item,
     type,
@@ -288,7 +289,7 @@ const ItemCard = ({
                     </section>
 
                     {/* Reviews */}
-                    <ReviewList productId={product.id} />
+                    <ReviewList productId={product.id} user={user} />
                 </div>
             </DialogContent>
         </Dialog>

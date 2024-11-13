@@ -15,6 +15,10 @@ return [
             'driver' => 'session',
             'provider' => 'riders',
         ],
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
     ],
 
     'providers' => [
@@ -26,6 +30,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\DeliveryRider::class,
         ],
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ]
     ],
 
     'passwords' => [
@@ -37,6 +45,12 @@ return [
         ],
         'riders' => [
             'provider' => 'riders',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'admins' => [
+            'provider' => 'admins',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,

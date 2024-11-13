@@ -1,57 +1,62 @@
-import { Button, CircularProgress } from "@mui/material";
 import AddItemsModal from "./AddItemModal";
-import { MagnifyingGlassIcon, TrashIcon } from "@radix-ui/react-icons";
-import { useForm } from "@inertiajs/react";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import {
+    MagnifyingGlassIcon,
+    Pencil1Icon,
+    TrashIcon,
+} from "@radix-ui/react-icons";
+import AddRiderModal from "./AddRiderModal";
+import { useState } from "react";
+import UpdateDeliveryRiderModal from "../UpdateDeliveryRiderModal";
 import Swal from "sweetalert2";
-import useDelete from "@/hooks/useDelete";
-import EditQuantity from "./EditQuantityModal";
+import { CircularProgress } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    deleteDeliveryRider,
+    fetchDeliveryRiders,
+    setRiders,
+} from "@/state/deliveryRiderSlice";
+import { useEffect } from "react";
 import { Input } from "@/shadcdn/ui/input";
+import AddAdminModal from "./AddAdminModal";
+import axios from "axios";
 
-export default function AdminTable({ initialProducts }) {
-    const [products, setProducts] = useState(initialProducts);
+export default function CreateAdminTable({ initialAdmins }) {
+    const [admins, setAdmins] = useState(initialAdmins);
+
     const [loading, setLoading] = useState(false);
 
-    const handleUpdateQuantity = (productId, newQuantity) => {
-        const order = {
-            quantity: newQuantity,
-        };
-
-        axios.put(`/api/products/${productId}`, order).then((data) => {
-            location.reload();
+    const handleDelete = (id) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/api/admin/${id}`).then(() => {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: `Successfully deleted`,
+                        icon: "success",
+                    });
+                    setAdmins((prev) =>
+                        prev.filter((admin) => admin.id !== id)
+                    );
+                });
+            }
         });
     };
 
-    const handleDelete = (id) => {
-        setLoading(true);
-        axios
-            .delete(`/products/${id}`)
-            .then(() => {
-                setProducts((prevProducts) =>
-                    prevProducts.filter((product) => product.id !== id)
-                );
-                Swal.fire({
-                    title: "Deleted!",
-                    text: `Successfully deleted`,
-                    icon: "success",
-                });
-
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error("Error deleting product:", error);
-            });
-    };
-
     const handleSearch = (e) => {
-        const filteredProducts = initialProducts.filter((product) =>
-            product.PRODUCT_NAME.toLowerCase().includes(
+        const filtered = initialAdmins.filter((admin) => {
+            return admin.EMAIL.toLowerCase().includes(
                 e.target.value.toLowerCase()
-            )
-        );
-
-        setProducts(filteredProducts);
+            );
+        });
+        setAdmins(filtered);
     };
 
     return (
@@ -67,9 +72,9 @@ export default function AdminTable({ initialProducts }) {
                         <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
                     </div>
                 </div>
-                <div className="w-full flex justify-between p-3">
-                    <h1 className="text-3xl font-semibold">Products</h1>
-                    <AddItemsModal setProducts={setProducts} />
+                <div className="w-full flex justify-between  p-3 ">
+                    <h1 className="text-3xl font-semibold">Admins</h1>
+                    <AddAdminModal setAdmins={setAdmins} />
                 </div>
                 <div class=" overflow-x-auto">
                     <div class="min-w-full inline-block align-middle">
@@ -81,58 +86,40 @@ export default function AdminTable({ initialProducts }) {
                                             scope="col"
                                             class="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize rounded-t-xl"
                                         >
-                                            Product Name
+                                            Id
                                         </th>
                                         <th
                                             scope="col"
                                             class="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"
                                         >
-                                            Quantity
+                                            Email
                                         </th>
                                         <th
                                             scope="col"
                                             class="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"
                                         >
-                                            Price
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize rounded-t-xl"
-                                        >
-                                            Actions
+                                            Action
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-300 ">
-                                    {products
-                                        ? products.map((product) => (
+                                    {admins
+                                        ? admins.map((admin) => (
                                               <tr class="bg-white transition-all duration-500 hover:bg-gray-50">
                                                   <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 ">
-                                                      {product.PRODUCT_NAME}
+                                                      {admin.id ?? ""}
                                                   </td>
                                                   <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
-                                                      {product.STOCK_QUANTITY}
+                                                      {admin.EMAIL ?? ""}
                                                   </td>
-                                                  <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
-                                                      {product.PRICE}
-                                                  </td>
+
                                                   <td class=" p-5 ">
-                                                      <div class="flex items-center gap-1">
-                                                          <button>
-                                                              <EditQuantity
-                                                                  product={
-                                                                      product
-                                                                  }
-                                                                  onUpdate={
-                                                                      handleUpdateQuantity
-                                                                  }
-                                                              />
-                                                          </button>
+                                                      <div class="flex items-center  gap-2 cursor-pointer">
                                                           <button
                                                               class="p-2 rounded-full  group transition-all duration-500  flex item-center"
                                                               onClick={() =>
                                                                   handleDelete(
-                                                                      product.id
+                                                                      admin.id
                                                                   )
                                                               }
                                                           >
@@ -141,9 +128,7 @@ export default function AdminTable({ initialProducts }) {
                                                                       size={10}
                                                                   />
                                                               ) : (
-                                                                  <div className="flex gap-2 items-center">
-                                                                      <TrashIcon />
-                                                                  </div>
+                                                                  <TrashIcon />
                                                               )}
                                                           </button>
                                                       </div>

@@ -39,38 +39,7 @@ export default function HomePage() {
                                 <button
                                     class="bg-main text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 py-3 px-6 text-sm lg:ml-5 hover:bg-indigo-700"
                                     onClick={() => {
-                                        Swal.fire({
-                                            title: "Select your role",
-                                            input: "select",
-                                            inputOptions: {
-                                                user: "User",
-                                                rider: "Rider",
-                                            },
-                                            inputPlaceholder: "Select a role",
-                                            showCancelButton: true,
-                                            confirmButtonText: "Confirm",
-                                        }).then((result) => {
-                                            if (result.isConfirmed) {
-                                                console.log(
-                                                    "You selected:",
-                                                    result.value
-                                                );
-
-                                                if (result.value == "user") {
-                                                    window.location.href =
-                                                        "/register";
-                                                } else if (
-                                                    result.value == "rider"
-                                                ) {
-                                                    window.location.href =
-                                                        "/register/rider";
-                                                } else {
-                                                    Swal.fire({
-                                                        title: "Choose One User",
-                                                    });
-                                                }
-                                            }
-                                        });
+                                        window.location.href = "/register";
                                     }}
                                 >
                                     Sign up

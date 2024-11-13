@@ -58,10 +58,10 @@ export default function OrderHistory({ orders }) {
             </div>
 
             <div className="flex flex-col mt-10">
-                <div className=" overflow-x-auto">
-                    <div className="min-w-full inline-block align-middle">
-                        <div className="overflow-auto  rounded-lg">
-                            <table className=" min-w-full  rounded-xl border ">
+                <div className="">
+                    <div className="">
+                        <div className="overflow-auto h-[400px] rounded-lg">
+                            <table className=" min-w-full  rounded-xl border  ">
                                 <thead className="border-b">
                                     <tr className="font-light">
                                         <th
@@ -89,7 +89,7 @@ export default function OrderHistory({ orders }) {
                                         ></th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-gray-300 ">
+                                <tbody className="divide-y divide-gray-300  ">
                                     {uniqueOrders.map((order) => (
                                         <tr className="">
                                             <td className="p-7 whitespace-nowrap  leading-6 font-medium text-gray-900 ">
@@ -110,6 +110,10 @@ export default function OrderHistory({ orders }) {
                                                     }}
                                                 >
                                                     Add Review
+                                                </button>
+
+                                                <button className="ml-5 px-10 py-2 bg-main rounded-sm text-white">
+                                                    Reorder
                                                 </button>
                                             </td>
                                         </tr>

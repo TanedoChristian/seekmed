@@ -1,6 +1,7 @@
 import ItemCard from "./ItemCard";
 
 export default function ProductList({
+    user,
     products,
     handleDialogOpen,
     activeCarts,
@@ -15,6 +16,7 @@ export default function ProductList({
                 <div class="flex flex-wrap gap-5  font-manrope">
                     {products.map((item) => (
                         <ItemCard
+                            user={user}
                             id={item.id}
                             item={item.PRODUCT_NAME}
                             img={item.image}

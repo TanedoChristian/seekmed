@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class Admin extends Model
+class Admin extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable, HasApiTokens;
 
     protected $table = 'admins'; // Specify the table name
 
@@ -16,4 +17,19 @@ class Admin extends Model
         'EMAIL', // Fillable fields
         'PASSWORD',
     ];
+
+    protected $hidden = [
+        'PASSWORD',
+        'remember_token',
+    ];
+
+    /**
+     * Get the password for the user.
+     *
+     * @return string
+     */
+    public function getAuthPassword()
+    {
+        return $this->PASSWORD; // Ensure this matches the column name in the database
+    }
 }

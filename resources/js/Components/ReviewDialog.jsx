@@ -73,7 +73,7 @@ export default function ReviewDialog({ order }) {
                             />
                         </div>
 
-                        <div className="flex w-full justify-center mt-10">
+                        <div className="flex w-full justify-center mt-10 items-center gap-3">
                             <button
                                 className="bg-main text-white px-10 py-3 rounded-sm outline-none"
                                 onClick={handleFeedback}

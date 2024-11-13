@@ -7,22 +7,25 @@ import TextInput from "@/Components/TextInput";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { Label } from "@/shadcdn/ui/label";
 import { Input } from "@/shadcdn/ui/input";
-import { WindowRounded } from "@mui/icons-material";
+import axios from "axios";
 
-export default function Login({ status, canResetPassword }) {
+export default function LoginAdmin({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        email: "",
-        password: "",
+        EMAIL: "",
+        PASSWORD: "",
         remember: false,
     });
 
-    const submit = (e) => {
+    const submit = async (e) => {
         e.preventDefault();
-        // post(route("login/admin"), {
-        //     onFinish: () => reset("password"),
-        // });
 
-        window.location.href = "/admin/dashboard";
+        try {
+            await post(route("login-admin"), {
+                onFinish: () => reset("PASSWORD"),
+            });
+        } catch (error) {
+            console.error("Login error:", error);
+        }
     };
 
     return (
@@ -34,25 +37,26 @@ export default function Login({ status, canResetPassword }) {
                         <Label htmlFor="email">Email</Label>
                         <Input
                             type="email"
-                            id="email"
+                            id="EMAIL"
                             placeholder="Email"
-                            onChange={(e) => setData("email", e.target.value)}
+                            onChange={(e) => setData("EMAIL", e.target.value)}
                         />
-                        <InputError message={errors.email} className="mt-2" />
+
+                        <InputError message={errors.EMAIL} className="mt-2" />
                     </div>
 
                     <div className="grid w-full max-w-sm items-center gap-1.5 mt-4">
                         <Label htmlFor="password">Password</Label>
                         <Input
                             type="password"
-                            id="password"
-                            placeholder="password"
+                            id="PASSWORD"
+                            placeholder="Password"
                             onChange={(e) =>
-                                setData("password", e.target.value)
+                                setData("PASSWORD", e.target.value)
                             }
                         />
                         <InputError
-                            message={errors.password}
+                            message={errors.PASSWORD}
                             className="mt-2"
                         />
                     </div>
@@ -82,12 +86,12 @@ export default function Login({ status, canResetPassword }) {
                             </Link>
                         )}
 
-                        <button
-                            type="submit"
-                            className="ms-4 bg-main text-white px-6 py-2 rounded-md"
+                        <PrimaryButton
+                            className="ms-4 bg-main text-white"
+                            disabled={processing}
                         >
                             Log in
-                        </button>
+                        </PrimaryButton>
                     </div>
                 </form>
             </div>

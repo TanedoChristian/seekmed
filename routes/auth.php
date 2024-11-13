@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -27,10 +28,16 @@ Route::middleware('guest')->group(function () {
     Route::get('rider/login', [AuthenticatedSessionController::class, 'riderLogin'])->name('rider.login');
     Route::get('admin/login', [AuthenticatedSessionController::class, 'createAdmin']);
 
+
     //Login Post
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
-    Route::post('login/admin', [AuthenticatedSessionController::class, 'storeAdmin']);
+    Route::post('login/admin', [AuthenticatedSessionController::class, 'storeAdmin'])->name('login-admin');
     Route::post('login/rider', [AuthenticatedSessionController::class, 'storeRider'])->name('login-rider');
+
+
+
+    Route::post('store/admin', [AdminController::class, 'store'])->name('store.admin');
+
 
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
@@ -73,4 +80,8 @@ Route::post('logout/rider', [AuthenticatedSessionController::class, 'destroyRide
     ->name('logout.rider')
     ->middleware('auth:rider');
 
+
+    Route::post('logout/admin', [AuthenticatedSessionController::class, 'destroyAdmin'])
+    ->name('logout.admin')
+    ->middleware('auth:admin');
 

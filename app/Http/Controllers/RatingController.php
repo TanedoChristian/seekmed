@@ -29,4 +29,10 @@ class RatingController extends Controller
 
         return response()->json($rating);
     }
+
+    public function removeRating($id){
+        $review = Ratings::findOrFail($id);
+        $review->delete();
+        return response()->json(['message' => 'Success'], 200);
+    }
 }

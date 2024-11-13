@@ -1,3 +1,5 @@
+import CreateReportDialog from "@/Components/CreateReportDialog";
+import ReviewDialog from "@/Components/ReviewDialog";
 import { Input } from "@/shadcdn/ui/input";
 import { Label } from "@/shadcdn/ui/label";
 import { Link } from "@inertiajs/react";
@@ -33,10 +35,13 @@ export default function Products({ orders }) {
                 icon: "success",
                 showCloseButton: true,
             });
-            setOrders((prevOrders) =>
-                prevOrders.filter((order) => order.product_id !== productId)
-            );
         });
+    };
+
+    const handleReturn = (productId) => {
+        setOrders((prevOrders) =>
+            prevOrders.filter((order) => order.product_id !== productId)
+        );
     };
 
     const handleRating = (rating, order) => {
@@ -145,7 +150,7 @@ export default function Products({ orders }) {
                                             }}
                                         />
 
-                                        <div class="flex items-center justify-center mt-5">
+                                        <div class="flex items-center justify-center mt-5 gap-3">
                                             <button
                                                 className="bg-main text-white rounded-md px-10 py-2"
                                                 onClick={() => {
@@ -156,6 +161,7 @@ export default function Products({ orders }) {
                                             >
                                                 Submit
                                             </button>
+                                            <CreateReportDialog order={order} />
                                         </div>
                                     </div>
                                 </div>

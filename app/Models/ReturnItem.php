@@ -18,5 +18,6 @@ class ReturnItem extends Model
         'RETURN_DATE',
         'ORDER_ID',
         'PRODUCT_ID',
+        'image'
     ];
 }
