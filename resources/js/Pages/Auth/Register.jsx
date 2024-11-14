@@ -4,6 +4,8 @@ import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import { Head, Link, useForm } from "@inertiajs/react";
+import { useState } from "react";
+import axios from "axios";
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -16,11 +18,44 @@ export default function Register() {
         password_confirmation: "",
     });
 
+    const [suggestions, setSuggestions] = useState([]);
+
     const submit = (e) => {
         e.preventDefault();
         post(route("register.post"), {
             onFinish: () => reset("password", "password_confirmation"),
         });
+    };
+
+    const handleInputChange = async (e) => {
+        const value = e.target.value;
+        setData("address", value);
+        if (value) {
+            try {
+                const response = await axios.get(
+                    `https://nominatim.openstreetmap.org/search`,
+                    {
+                        params: {
+                            q: value,
+                            format: "json",
+                            addressdetails: 1,
+                            countrycodes: "PH",
+                            limit: 5,
+                        },
+                    }
+                );
+                setSuggestions(response.data);
+            } catch (error) {
+                console.error("Error fetching location data:", error);
+            }
+        } else {
+            setSuggestions([]);
+        }
+    };
+
+    const handleSuggestionClick = (location) => {
+        setData("address", location.display_name);
+        setSuggestions([]);
     };
 
     return (
@@ -36,7 +71,7 @@ export default function Register() {
                                 id="name"
                                 name="name"
                                 value={data.first_name}
-                                className="mt-1 block w-full"
+                                className="mt-1 block w-full border p-2"
                                 autoComplete="name"
                                 isFocused={true}
                                 onChange={(e) =>
@@ -58,7 +93,7 @@ export default function Register() {
                                 id="name"
                                 name="name"
                                 value={data.last_name}
-                                className="mt-1 block w-full"
+                                className="mt-1 block w-full border p-2"
                                 autoComplete="name"
                                 isFocused={true}
                                 onChange={(e) =>
@@ -82,7 +117,7 @@ export default function Register() {
                             type="email"
                             name="email"
                             value={data.email}
-                            className="mt-1 block w-full"
+                            className="mt-1 block w-full border p-2"
                             autoComplete="username"
                             onChange={(e) => setData("email", e.target.value)}
                             required
@@ -99,7 +134,7 @@ export default function Register() {
                             type="text"
                             name="email"
                             value={data.contact_no}
-                            className="mt-1 block w-full"
+                            className="mt-1 block w-full border p-2"
                             autoComplete="username"
                             onChange={(e) =>
                                 setData("contact_no", e.target.value)
@@ -115,15 +150,29 @@ export default function Register() {
 
                     <div className="mt-4">
                         <InputLabel htmlFor="email" value="Address" />
-
+                        {suggestions.length > 0 && (
+                            <ul className="flex flex-col h-[15vh] overflow-auto bg-white border border-gray-200 rounded-lg shadow-lg w-full text-sm">
+                                {suggestions.map((location) => (
+                                    <li
+                                        key={location.place_id}
+                                        onClick={() =>
+                                            handleSuggestionClick(location)
+                                        }
+                                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                    >
+                                        {location.display_name}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                         <TextInput
                             id="email"
                             type="text"
                             name="email"
-                            value={data.address}
-                            className="mt-1 block w-full"
+                            className="mt-1 block w-full border p-2"
                             autoComplete="username"
-                            onChange={(e) => setData("address", e.target.value)}
+                            value={data.address}
+                            onChange={handleInputChange}
                             required
                         />
 
@@ -136,9 +185,9 @@ export default function Register() {
                         <TextInput
                             id="password"
                             type="password"
-                            name="password"
+                            name="password "
                             value={data.password}
-                            className="mt-1 block w-full"
+                            className="mt-1 block w-full border p-2"
                             autoComplete="new-password"
                             onChange={(e) =>
                                 setData("password", e.target.value)
@@ -163,7 +212,7 @@ export default function Register() {
                             type="password"
                             name="password_confirmation"
                             value={data.password_confirmation}
-                            className="mt-1 block w-full"
+                            className="mt-1 block w-full border p-2"
                             autoComplete="new-password"
                             onChange={(e) =>
                                 setData("password_confirmation", e.target.value)

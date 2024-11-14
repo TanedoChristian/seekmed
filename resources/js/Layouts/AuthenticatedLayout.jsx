@@ -164,6 +164,7 @@ export default function Authenticated({
                                 <ToolTip
                                     trigger={
                                         <CheckoutDialog
+                                            user={user}
                                             open={open}
                                             setIsOpen={setIsOpen}
                                             activeCarts={activeCarts}

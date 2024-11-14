@@ -28,4 +28,10 @@ class ReturnController extends Controller
 
         return response()->json(['Message' => 'Success']);
     }
+
+    public function removeReturn($id){
+        $return = ReturnItem::findOrFail($id);
+        $return->delete();
+        return response()->json(['message' => 'Success'], 200);
+    }
 }

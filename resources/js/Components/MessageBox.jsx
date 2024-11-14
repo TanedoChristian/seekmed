@@ -83,9 +83,9 @@ const MessageBox = ({ setTableCategory }) => {
     const updateOrder = async (id) => {
         setIsChatActive(false);
         const payload = {
-            id: 16,
+            id: id,
             STATUS: "done",
-            cart_id: 1,
+            cart_id: orders.cart_id,
         };
 
         const response = await axios.put("/api/orders/update", payload);

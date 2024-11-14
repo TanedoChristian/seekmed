@@ -56,7 +56,7 @@ export default function AdminTable({ initialProducts }) {
     };
 
     return (
-        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 w-[80%]">
+        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 w-[95%]">
             <div class="flex flex-col">
                 <div className="flex gap-3 items-center ">
                     <div className="relative">

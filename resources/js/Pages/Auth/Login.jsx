@@ -35,7 +35,7 @@ export default function Login({ status, canResetPassword }) {
                         Return
                     </button>
                 </div>
-                <h1 className="text-5xl font-bold text-center">Login</h1>
+                <h1 className="text-5xl font-bold text-center">Login User</h1>
                 <form onSubmit={submit}>
                     <div className="grid w-full max-w-sm items-center gap-1.5">
                         <Label htmlFor="email">Email</Label>

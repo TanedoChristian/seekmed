@@ -13,6 +13,8 @@ import AdminTable from "@/Components/Admin/AdminTable";
 import Reports from "@/Components/Admin/Reports";
 import CreateAdminTable from "@/Components/Admin/CreateAdminTable";
 import ReviewsTable from "@/Components/Admin/RreviewsTable";
+import InventoryTable from "@/Components/Admin/InventoryTable";
+import RefundsTable from "@/Components/Admin/RefundsTable";
 
 export default function Admin({
     auth,
@@ -22,8 +24,15 @@ export default function Admin({
     orders,
     admins,
     reviews,
+    inventories,
+    totalRevenuePerProduct,
+    productsSoldPerMonth,
+    returns,
+    totalReturnPerProduct,
 }) {
     const { post } = useForm({});
+
+    console.log(totalRevenuePerProduct);
     const submit = (e) => {
         post(route("logout.admin"));
     };
@@ -132,6 +141,16 @@ export default function Admin({
                     />
 
                     {tableCategory == "inventory" ? (
+                        <div class="w-full  py-10">
+                            <InventoryTable
+                                initialInventories={inventories}
+                                orders={orders}
+                                totalRevenuePerProduct={totalRevenuePerProduct}
+                                productsSoldPerMonth={productsSoldPerMonth}
+                                totalReturnPerProduct={totalReturnPerProduct}
+                            />
+                        </div>
+                    ) : tableCategory == "products" ? (
                         <div class="w-full flex justify-center py-10">
                             <AdminTable initialProducts={products} />
                         </div>
@@ -153,7 +172,7 @@ export default function Admin({
                         </div>
                     ) : (
                         <div class="w-full flex  py-10">
-                            <Reports orders={orders} />
+                            <RefundsTable reviews={reviews} returns={returns} />
                         </div>
                     )}
                 </div>

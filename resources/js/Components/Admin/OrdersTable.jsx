@@ -26,7 +26,7 @@ export default function OrdersTable({ orders }) {
     };
 
     return (
-        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 w-[80%]">
+        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 w-[95%]">
             <div class="flex flex-col">
                 <div className="w-full flex justify-between  p-3 ">
                     <h1 className="text-3xl font-semibold">Orders</h1>

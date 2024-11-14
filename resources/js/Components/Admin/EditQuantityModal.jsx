@@ -6,6 +6,7 @@ import {
 } from "@/shadcdn/ui/dialog";
 import { Pencil1Icon } from "@radix-ui/react-icons";
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 export default function EditQuantity({ product, onUpdate }) {
     const [quantity, setQuantity] = useState(product.STOCK_QUANTITY);
@@ -19,7 +20,12 @@ export default function EditQuantity({ product, onUpdate }) {
     };
 
     const handleSave = () => {
-        // Call the onUpdate function passed from parent with new quantity
+        Swal.fire({
+            title: "Product Quantity Updated",
+            icon: "success",
+            showConfirmButton: false,
+        });
+
         if (onUpdate) {
             onUpdate(product.id, quantity);
         }

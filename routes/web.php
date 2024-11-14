@@ -49,6 +49,7 @@ Route::middleware('auth:admin')->group(function (){
 
 Route::prefix('api')->group(function() {
     Route::delete('/reviews/{id}', [RatingController::class, 'removeRating']);
+    Route::delete('/returns/{id}', [ReturnController::class, 'removeReturn']);
     Route::delete('/admin/{id}', [AdminController::class, 'destroy']);
     Route::post('/return', [ReturnController::class, 'store']);
     Route::post('/reviews', [RatingController::class, 'store']);

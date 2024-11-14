@@ -49,7 +49,7 @@ export default function ReviewsTable({ reviews }) {
     };
 
     return (
-        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 w-[80%] mx-auto">
+        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 w-[95%] mx-auto">
             <div className="flex flex-col">
                 <div className="flex gap-3 items-center mb-4">
                     <div className="relative">

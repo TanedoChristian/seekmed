@@ -9,7 +9,7 @@ import { RadioGroupItem, RadioGroup } from "@/shadcdn/ui/radio-group";
 import { setDashboardCategory, setOrderAccepted } from "@/state/userSlice";
 import { RemoveCircle, ShoppingCart } from "@mui/icons-material";
 import { Divider } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -17,13 +17,19 @@ import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { Controller, useForm } from "react-hook-form";
 
-export default function CheckoutDialog({ activeCarts, setActiveCarts }) {
+export default function CheckoutDialog({ activeCarts, setActiveCarts, user }) {
+    console.log(user);
+
     const [isOpen, setIsOpen] = useState(false);
     const [suggestions, setSuggestions] = useState([]);
 
     const { register, handleSubmit, reset, setValue, control } = useForm();
 
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        setValue("address", user.address);
+    }, []);
 
     const removeFromCart = (index) => {
         setActiveCarts((prevCarts) => {
@@ -107,7 +113,6 @@ export default function CheckoutDialog({ activeCarts, setActiveCarts }) {
             setSuggestions([]);
         }
     };
-
 
     const handleSuggestionClick = (location) => {
         setValue("address", location.display_name);
@@ -264,7 +269,6 @@ export default function CheckoutDialog({ activeCarts, setActiveCarts }) {
                                                 onChange={handleInputChange}
                                                 type="text"
                                                 class="w-full focus:outline-none text-gray-900 relative placeholder-gray-400 text-lg font-normal leading-relaxed px-5 py-3 rounded-lg shadow-[0px_1px_2px_0px_rgba(16,_24,_40,_0.05)] border border-gray-200 justify-start items-center gap-2 inline-flex"
-                                                placeholder="John"
                                             />
                                         </div>
                                         <label class="flex items-center mt-3 text-gray-400 text-sm font-medium">
@@ -328,7 +332,7 @@ export default function CheckoutDialog({ activeCarts, setActiveCarts }) {
 
                                         <div class="flex items-center justify-between py-8">
                                             <p class="font-medium text-xl leading-8 text-black">
-                                                3 Items
+                                                {activeCarts.length} Item/s
                                             </p>
                                             <p class="font-semibold text-xl leading-8 text-indigo-600"></p>
                                         </div>
